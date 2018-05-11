@@ -1,0 +1,7 @@
+{
+  "name": "escape-route",
+  "short_name": "escape-route",
+  "description": "escape route app",
+  "start_url": "/",
+  "display": "standalone"
+}
