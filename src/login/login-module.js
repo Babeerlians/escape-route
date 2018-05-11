@@ -12,7 +12,6 @@ class LoginModule extends PolymerElement {
           display: block;
         }
       </style>
-      <label>Log in</label>
       <login-button>Login</login-button>
     `;
   }
