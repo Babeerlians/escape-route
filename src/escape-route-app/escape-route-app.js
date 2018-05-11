@@ -1,4 +1,5 @@
-import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '../login/login-module.js';
 
 /**
  * @customElement
@@ -12,16 +13,26 @@ class EscapeRouteApp extends PolymerElement {
           display: block;
         }
       </style>
-      <h2>Hello [[prop1]]!</h2>
+      <h2>Escape Route</h2>
+      <login-module></login-module>
     `;
   }
-  static get properties() {
-    return {
-      prop1: {
-        type: String,
-        value: 'escape-route-app'
-      }
+
+  ready() {
+    super.ready();
+    this._initializeFirebaseApp();
+  }
+
+  _initializeFirebaseApp() {
+    var config = {
+      apiKey: "AIzaSyD67FXv2kXAFAFTITru3_UH63VXeYQRURk",
+      authDomain: "escape-route-5e029.firebaseapp.com",
+      databaseURL: "https://escape-route-5e029.firebaseio.com",
+      projectId: "escape-route-5e029",
+      storageBucket: "escape-route-5e029.appspot.com",
+      messagingSenderId: "372037266043"
     };
+    firebase.initializeApp(config);
   }
 }
 
