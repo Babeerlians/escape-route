@@ -2,6 +2,7 @@
   "name": "escape-route",
   "description": "escape route app",
   "dependencies": {
+    "@polymer/paper-button": "^3.0.0-pre.19",
     "@polymer/polymer": "^3.0.0"
   },
   "devDependencies": {
