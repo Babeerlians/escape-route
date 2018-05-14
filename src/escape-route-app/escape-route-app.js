@@ -17,7 +17,7 @@ class EscapeRouteApp extends PolymerElement {
       </style>
       <h2>Escape Route</h2>
       <login-module></login-module>
-      <search-escape></search-escape>
+      <search-escape label="Escape"></search-escape>
     `;
   }
 

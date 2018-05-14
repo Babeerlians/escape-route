@@ -43,8 +43,8 @@ class SearchEscape extends PolymerElement {
     static get properties() { 
         return {
             choices: [],
-            label: 'String',
-            value: {
+            label: String,
+            itemValue: {
                 type: Object,
             },
             searchValue: {
@@ -56,8 +56,7 @@ class SearchEscape extends PolymerElement {
     }
 
     ready() {
-        this.super.ready();
-        this.$.resultList.render()
+        super.ready();
     }
 
     _valueChanged(e) {
@@ -83,7 +82,7 @@ class SearchEscape extends PolymerElement {
     _selectItem(event) {
         var collapse = this.$.collapse;
         this.set('searchValue', event.model.item.name)
-        this.set('value', event.model.item)
+        this.set('itemValue', event.model.item)
         collapse.toggle()
     }
 
