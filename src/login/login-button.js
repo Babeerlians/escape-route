@@ -5,12 +5,18 @@ import '@polymer/paper-button/paper-button.js'
 class LoginButton extends PolymerElement {
     static get template() {
         return html`
-        <style>
+        <style is="custom-style">
             :host {
                 display: block;
             }
+        
+            paper-button.indigo {
+                background-color: indigo;
+                color: white;
+            }
+
         </style>
-        <paper-button raised>Login</paper-button>
+        <paper-button noink class="indigo" on-click="handleClick">Login</paper-button>
         `;
     }
 
@@ -18,6 +24,28 @@ class LoginButton extends PolymerElement {
         super.ready();
     }
 
+    handleClick() {
+        var provider = new firebase.auth.GoogleAuthProvider();
+
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            var token = result.credential.accessToken;
+            // The signed-in user info.
+            var user = result.user;
+            // ...
+          }).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            // ...
+          });
+
+
+    }
 }
 
 
