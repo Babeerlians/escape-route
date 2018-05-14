@@ -1,15 +1,17 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-button/paper-button.js';
+import '../styles/shared-styles.js';
 
 // define the element's class element
 class EscapeMates extends PolymerElement {
     static get template() {
         return html`
-        <style is="custom-style">
+         <style include="shared-styles">
             :host {
                 display: block;
-            }
-        
+
+                padding: 10px;
+            }        
             paper-button.red {
                 background-color: red;
                 color: white;

@@ -8,20 +8,17 @@ import '../styles/shared-styles.js';
 class LoginModule extends PolymerElement {
   static get template() {
     return html`
-      <style>
+       <style include="shared-styles">
         :host {
           display: block;
+
+          padding: 10px;
         }
       </style>
       <div class="card">
         <login-button>Login</login-button>
       </div>
     `;
-  }
-
-  ready() {
-    super.ready();
-    console.log('Login');
   }
 }
 

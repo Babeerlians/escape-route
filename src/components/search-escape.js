@@ -11,7 +11,12 @@ class SearchEscape extends PolymerElement {
 
     static get template() {
         return html`
-            <style>
+            <style include="shared-styles">
+                :host {
+                    display: block;
+
+                    padding: 10px;
+                }
                 iron-collapse {
                     box-shadow: 6px;
                 }
