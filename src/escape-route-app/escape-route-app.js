@@ -1,5 +1,6 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '../login/login-module.js';
+import '../mates/escape-mates.js';
 
 import '../components/search-escape.js';
 
@@ -14,10 +15,35 @@ class EscapeRouteApp extends PolymerElement {
         :host {
           display: block;
         }
+      
+        .card {
+          margin: 24px;
+          padding: 16px;
+          color: #757575;
+          border-radius: 5px;
+          background-color: #fff;
+          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+          text-align: center;
+        }
       </style>
-      <h2>Escape Route</h2>
-      <login-module></login-module>
-      <search-escape label="Escape"></search-escape>
+      
+      <app-drawer-layout fullbleed>
+        <app-header-layout>
+          <iron-pages role="main">
+            <div class="card">
+              <h1>Escape Route</h1>
+              <login-module></login-module>
+            </div>
+            <search-escape label="Escape"></search-escape>
+          </iron-pages>
+          <iron-pages>
+            <div class="card">
+              <escape-mates></escape-mates>
+            </div>
+          </iron-pages>
+        </app-header-layout>
+      </app-drawer-layout>
+      
     `;
   }
 
