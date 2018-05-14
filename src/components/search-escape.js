@@ -26,18 +26,20 @@ class SearchEscape extends PolymerElement {
                     text-transform: none;
                 }
             </style>
-            <paper-input label="{{label}}" value="{{searchValue}}"></paper-input>
-            <iron-collapse id="collapse">
-                <paper-material>
-                    <div>
-                        <template id="resultList" is="dom-repeat" items="{{choices}}">
-                            <paper-item>
-                                <paper-button on-tap="_selectItem">{{item.name.es}}</paper-button>
-                            </paper-item>
-                        </template>
-                    </div>
-                </paper-material>
-            </iron-collapse>
+            <div class="card">
+                <paper-input label="{{label}}" value="{{searchValue}}"></paper-input>
+                <iron-collapse id="collapse">
+                    <paper-material>
+                        <div>
+                            <template id="resultList" is="dom-repeat" items="{{choices}}">
+                                <paper-item>
+                                    <paper-button on-tap="_selectItem">{{item.name.es}}</paper-button>
+                                </paper-item>
+                            </template>
+                        </div>
+                    </paper-material>
+                </iron-collapse>
+            </div>
         `;
     }
 

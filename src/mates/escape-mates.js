@@ -17,19 +17,14 @@ class EscapeMates extends PolymerElement {
                 color: white;
             }
         </style>
-        <paper-button raised noink class="red" on-click="getMates">Mates</paper-button>
-        <paper-button raised noink class="red" on-click="logout">Log out</paper-button>
-
+        <div class="card">
+            <paper-button raised noink class="red" on-click="_getMates">Mates</paper-button>
+            <paper-button raised noink class="red" on-click="_logout">Log out</paper-button>
+        </div>
         `;
     }
 
-
-
-    ready() {
-        super.ready();
-    }
-
-    getMates() {
+    _getMates() {
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
                 console.log(user.displayName);
@@ -39,7 +34,7 @@ class EscapeMates extends PolymerElement {
         });
     }
 
-    logout() {
+    _logout() {
         firebase.auth().signOut().then(function () {
             console.log("chao");
         }, function (error) {
