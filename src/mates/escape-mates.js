@@ -41,7 +41,7 @@ class EscapeMates extends PolymerElement {
         <div class="card">
             <iron-list items="[[mates]]" as="mate">
                 <template>
-                    <p>[[mate.name]]</p>
+                    <p>[[mate.displayName]]</p>
                 </template>
             </iron-list>
         </div>
@@ -63,11 +63,14 @@ class EscapeMates extends PolymerElement {
             if (user) {
                 console.log(user);
                 this.user = user;
-                this.mates = [{
-                    name: "tona"
-                },{ 
-                    name: "tono" 
-                }];
+                firebase.database().ref('users/'+this.user.uid).on('value', snapshot => {
+                    let usersObject = snapshot.val();
+                    usersObject.mates.map(mate=>{
+                        firebase.database().ref('users/'+mate.uid).on('value', mateSnapshot => {
+                            this.mates.push(mateSnapshot.val());
+                        });
+                    });
+                });
             } else {
                 console.log("error de mates");
             }
