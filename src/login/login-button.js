@@ -10,12 +10,12 @@ class LoginButton extends PolymerElement {
                 display: block;
             }
         
-            paper-button.indigo {
-                background-color: indigo;
+            paper-button.red {
+                background-color: red;
                 color: white;
             }
         </style>
-        <paper-button raised noink class="indigo" on-click="handleClick">Login</paper-button>
+        <paper-button raised noink class="red" on-click="handleClick">Login with Google</paper-button>
 
         `;
     }
