@@ -36,7 +36,7 @@ class EscapeRouteApp extends PolymerElement {
     return html`
       <style>
         :host {
-          --app-primary-color: #4285f4;
+          --app-primary-color: #555;
           --app-secondary-color: black;
 
           display: block;
@@ -71,6 +71,9 @@ class EscapeRouteApp extends PolymerElement {
           color: black;
           font-weight: bold;
         }
+        a.logged {
+          display: none;
+        }
       </style>
 
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
@@ -84,7 +87,7 @@ class EscapeRouteApp extends PolymerElement {
         <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
           <app-toolbar>Menu</app-toolbar>
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="login" href="[[rootPath]]login">Login</a>
+            <a name="login" href="[[rootPath]]login">Login</a>
             <a name="search" href="[[rootPath]]search">Search</a>
             <a name="mates" href="[[rootPath]]mates">Mates</a>
           </iron-selector>
@@ -101,7 +104,7 @@ class EscapeRouteApp extends PolymerElement {
           </app-header>
 
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
-            <login-module name="login"></login-module>
+            <login-module name="login" on-logged="_alreadyLogged"></login-module>
             <search-escape name="search" label="Escape"></search-escape>
             <escape-mates name="mates"></escape-mates>
           </iron-pages>
@@ -118,7 +121,8 @@ class EscapeRouteApp extends PolymerElement {
         observer: '_pageChanged'
       },
       routeData: Object,
-      subroute: Object
+      subroute: Object,
+      appInitialized: Boolean
     };
   }
 
@@ -134,21 +138,33 @@ class EscapeRouteApp extends PolymerElement {
   }
 
   _initializeFirebaseApp() {
-    var config = {
-      apiKey: "AIzaSyD67FXv2kXAFAFTITru3_UH63VXeYQRURk",
-      authDomain: "escape-route-5e029.firebaseapp.com",
-      databaseURL: "https://escape-route-5e029.firebaseio.com",
-      projectId: "escape-route-5e029",
-      storageBucket: "escape-route-5e029.appspot.com",
-      messagingSenderId: "372037266043"
-    };
-    firebase.initializeApp(config);
+    if(!this.appInitialized){
+      var config = {
+        apiKey: "AIzaSyD67FXv2kXAFAFTITru3_UH63VXeYQRURk",
+        authDomain: "escape-route-5e029.firebaseapp.com",
+        databaseURL: "https://escape-route-5e029.firebaseio.com",
+        projectId: "escape-route-5e029",
+        storageBucket: "escape-route-5e029.appspot.com",
+        messagingSenderId: "372037266043"
+      };
+      firebase.initializeApp(config);
+      this.appInitialized= true;
+    }
   }
 
 
   _routePageChanged(page) {
-    if (['login', 'search', 'mates'].indexOf(page) !== -1) {
-      this.page = page;
+    if(!this.appInitialized){
+      this._initializeFirebaseApp();
+    }
+    if (['search', 'mates'].indexOf(page) !== -1) {
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          this.page = page;
+        } else {
+          this.page = 'login';
+        }
+      });
     } else {
       this.page = 'login';
     }
@@ -159,11 +175,11 @@ class EscapeRouteApp extends PolymerElement {
     }
   }
 
+  _alreadyLogged(e){
+    this.set('route.path', 'search');
+  }
+
   _pageChanged(page) {
-    // Import the page component on demand.
-    //
-    // Note: `polymer build` doesn't like string concatenation in the import
-    // statement, so break it up.
     switch (page) {
       case 'login':
         import('../login/login-module.js');

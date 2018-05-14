@@ -20,6 +20,15 @@ class LoginModule extends PolymerElement {
       </div>
     `;
   }
+
+  connectedCallback() {
+    super.connectedCallback();
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.dispatchEvent(new CustomEvent('logged', {detail: {user: user}}));
+      }
+    });
+  }
 }
 
 window.customElements.define('login-module', LoginModule);
