@@ -12,9 +12,15 @@ class EscapeRouteApp extends PolymerElement {
         :host {
           display: block;
         }
+      
+        .center {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
       </style>
-      <h2>Escape Route</h2>
-      <login-module></login-module>
+      <h1 class="center">Escape Route</h1>
+      <login-module class="center"></login-module>
     `;
   }
 
