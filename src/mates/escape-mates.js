@@ -28,7 +28,6 @@ class EscapeMates extends PolymerElement {
             }
         </style>
         <div class="card">
-            <paper-button raised noink class="red" on-click="getMates">Mates</paper-button>
             <paper-button raised noink class="red" on-click="logout">Log out</paper-button>
             <iron-flex-layout>
                 <iron-image class="circle" alt="user profile picture" src="{{user.photoURL}}" sizing="cover"></iron-image>
@@ -37,7 +36,6 @@ class EscapeMates extends PolymerElement {
                 <paper-input readonly label="uid" value="{{user.uid}}"></paper-input>
             </iron-flex-layout>
         </div>
-        
         <div class="card">
             <iron-list items="[[mates]]" as="mate">
                 <template>
@@ -53,12 +51,18 @@ class EscapeMates extends PolymerElement {
             user: String,
             mates: {
                 type: Array,
-                value: []
+                reflectToAttribute: true
             }
         }
     }
 
-    getMates() {
+    ready(){
+        super.ready();
+        this._getMates();
+    }
+
+    _getMates() {
+        this.mates=[];
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 console.log(user);
@@ -69,6 +73,7 @@ class EscapeMates extends PolymerElement {
                         firebase.database().ref('users/'+mate.uid).on('value', mateSnapshot => {
                             this.mates.push(mateSnapshot.val());
                         });
+                        console.log('mates', this.mates);
                     });
                 });
             } else {

@@ -132,8 +132,8 @@ class EscapeRouteApp extends PolymerElement {
     ];
   }
 
-  ready() {
-    super.ready();
+  constructor() {
+    super();
     this._initializeFirebaseApp();
   }
 
@@ -176,7 +176,7 @@ class EscapeRouteApp extends PolymerElement {
   }
 
   _alreadyLogged(e){
-    this.set('route.path', 'search');
+    this.set('route.path', 'mates');
   }
 
   _pageChanged(page) {
