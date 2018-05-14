@@ -15,7 +15,7 @@ class LoginButton extends PolymerElement {
                 color: white;
             }
         </style>
-        <paper-button raised noink class="red" on-click="handleClick">Login with Google</paper-button>
+        <paper-button raised noink class="red" on-click="logIn">Login with Google</paper-button>
 
         `;
     }
@@ -26,7 +26,7 @@ class LoginButton extends PolymerElement {
         super.ready();
     }
 
-    handleClick() {
+    logIn() {
         var provider = new firebase.auth.GoogleAuthProvider();
         
         firebase.auth().signInWithPopup(provider).then(function (result) {
