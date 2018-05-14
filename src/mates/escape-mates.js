@@ -2,6 +2,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/iron-image/iron-image.js';
+import '@polymer/iron-list/iron-list.js';
 import '../styles/shared-styles.js';
 // define the element's class element
 class EscapeMates extends PolymerElement {
@@ -19,33 +20,41 @@ class EscapeMates extends PolymerElement {
         
             .circle {
                 display: inline-block;
-                float:right;
+                float: right;
                 border-radius: 50%;
                 background: #ddd;
                 font-size: 15px;
-                line-height: 64px;
+                line-height: 200px;
             }
-
-
         </style>
         <div class="card">
             <paper-button raised noink class="red" on-click="getMates">Mates</paper-button>
             <paper-button raised noink class="red" on-click="logout">Log out</paper-button>
             <iron-flex-layout>
-                <div class="circle">
-                    <iron-image alt="user profile picture" src="{{user.photoURL}}" cover= "contain"></iron-image>
-                </div>
+                <iron-image class="circle" alt="user profile picture" src="{{user.photoURL}}" sizing="cover"></iron-image>
                 <paper-input readonly label="name" value="{{user.displayName}}"></paper-input>
                 <paper-input readonly label="email" value="{{user.email}}"></paper-input>
                 <paper-input readonly label="uid" value="{{user.uid}}"></paper-input>
             </iron-flex-layout>
+        </div>
+        
+        <div class="card">
+            <iron-list items="[[mates]]" as="mate">
+                <template>
+                    <p>[[mate.name]]</p>
+                </template>
+            </iron-list>
         </div>
         `;
     }
 
     static get properties() {
         return {
-            user: String
+            user: String,
+            mates: {
+                type: Array,
+                value: []
+            }
         }
     }
 
@@ -54,6 +63,11 @@ class EscapeMates extends PolymerElement {
             if (user) {
                 console.log(user);
                 this.user = user;
+                this.mates = [{
+                    name: "tona"
+                },{ 
+                    name: "tono" 
+                }];
             } else {
                 console.log("error de mates");
             }
@@ -64,6 +78,7 @@ class EscapeMates extends PolymerElement {
         firebase.auth().signOut().then(() => {
             console.log("chao");
             this.user = undefined;
+            this.mates = [];
         }, function (error) {
             console.log("sigues logueado");
         });

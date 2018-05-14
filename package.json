@@ -9,6 +9,7 @@
     "@polymer/iron-flex-layout": "^3.0.0-pre.19",
     "@polymer/iron-iconset-svg": "^3.0.0-pre.19",
     "@polymer/iron-image": "^3.0.0-pre.19",
+    "@polymer/iron-list": "^3.0.0-pre.19",
     "@polymer/iron-media-query": "^3.0.0-pre.19",
     "@polymer/iron-pages": "^3.0.0-pre.19",
     "@polymer/iron-selector": "^3.0.0-pre.19",
