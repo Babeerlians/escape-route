@@ -1,7 +1,4 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import '../login/login-module.js';
-
-import '../components/search-escape.js';
 
 /**
  * @customElement
@@ -14,31 +11,42 @@ class EscapeRouteApp extends PolymerElement {
         :host {
           display: block;
         }
-      
-        .card {
-          margin: 24px;
-          padding: 16px;
-          color: #757575;
-          border-radius: 5px;
-          background-color: #fff;
-          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-          text-align: center;
-        }
       </style>
-      
+      <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
+      </app-location>
+
+      <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
+      </app-route>
+
       <app-drawer-layout fullbleed>
         <app-header-layout>
-          <iron-pages role="main">
-            <div class="card">
-              <h1>Escape Route</h1>
-              <login-module></login-module>
-            </div>
-            <search-escape label="Escape"></search-escape>
+          <h1>Escape Route</h1>
+          <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
+            <login-module name="login"></login-module>
+            <search-escape name="search" label="Escape"></search-escape>
           </iron-pages>
         </app-header-layout>
       </app-drawer-layout>
       
     `;
+  }
+
+  static get properties() {
+    return {
+      page: {
+        type: String,
+        reflectToAttribute: true,
+        observer: '_pageChanged'
+      },
+      routeData: Object,
+      subroute: Object
+    };
+  }
+
+  static get observers() {
+    return [
+      '_routePageChanged(routeData.page)'
+    ];
   }
 
   ready() {
@@ -57,6 +65,30 @@ class EscapeRouteApp extends PolymerElement {
     };
     firebase.initializeApp(config);
   }
+
+  _routePageChanged(page) {
+   if (['login', 'search'].indexOf(page) !== -1) {
+     this.page = page;
+   } else {
+     this.page = 'login';
+   }
+
+   // Close a non-persistent drawer when the page & route are changed.
+   if (!this.$.drawer.persistent) {
+     this.$.drawer.close();
+   }
+ }
+
+ _pageChanged(page) {
+   switch (page) {
+     case 'login':
+       import('../login/login-module.js');
+       break;
+     case 'search':
+       import('../components/search-escape.js');
+       break;
+   }
+ }
 }
 
 window.customElements.define('escape-route-app', EscapeRouteApp);

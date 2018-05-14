@@ -5,6 +5,7 @@ import '@polymer/paper-material/paper-material.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/paper-button/paper-button.js';
+import '../styles/shared-styles.js';
 
 class SearchEscape extends PolymerElement {
 
@@ -23,18 +24,20 @@ class SearchEscape extends PolymerElement {
                     text-transform: none;
                 }
             </style>
-            <paper-input label="{{label}}"></paper-input>
-            <iron-collapse id="collapse">
-                <paper-material>
-                    <div>
-                        <template id="resultList" is="dom-repeat" items="{{choices}}" filter="_listFilter">
-                            <paper-item>
-                                <paper-button on-tap="_selectItem">{{item.name}}</paper-button>
-                            </paper-item>
-                        </template>
-                    </div>
-                </paper-material>
-            </iron-collapse>
+            <div class="card">
+                <paper-input label="{{label}}"></paper-input>
+                <iron-collapse id="collapse">
+                    <paper-material>
+                        <div>
+                            <template id="resultList" is="dom-repeat" items="{{choices}}" filter="_listFilter">
+                                <paper-item>
+                                    <paper-button on-tap="_selectItem">{{item.name}}</paper-button>
+                                </paper-item>
+                            </template>
+                        </div>
+                    </paper-material>
+                </iron-collapse>
+            </div>
         `;
     }
 

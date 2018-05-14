@@ -1,5 +1,6 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '../login/login-button.js';
+import '../styles/shared-styles.js';
 /**
  * @customElement
  * @polymer
@@ -12,7 +13,9 @@ class LoginModule extends PolymerElement {
           display: block;
         }
       </style>
-      <login-button>Login</login-button>
+      <div class="card">
+        <login-button>Login</login-button>
+      </div>
     `;
   }
 
