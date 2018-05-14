@@ -24,6 +24,7 @@ class EscapeRouteApp extends PolymerElement {
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
             <login-module name="login"></login-module>
             <search-escape name="search" label="Escape"></search-escape>
+            <escape-mates name="mates"></escape-mates>
           </iron-pages>
         </app-header-layout>
       </app-drawer-layout>
@@ -67,7 +68,7 @@ class EscapeRouteApp extends PolymerElement {
   }
 
   _routePageChanged(page) {
-   if (['login', 'search'].indexOf(page) !== -1) {
+   if (['login', 'search', 'mates'].indexOf(page) !== -1) {
      this.page = page;
    } else {
      this.page = 'login';
@@ -86,6 +87,9 @@ class EscapeRouteApp extends PolymerElement {
        break;
      case 'search':
        import('../components/search-escape.js');
+       break;
+     case 'mates':
+       import('../mates/escape-mates.js');
        break;
    }
  }

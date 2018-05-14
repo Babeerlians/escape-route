@@ -12,9 +12,6 @@ class SearchEscape extends PolymerElement {
     static get template() {
         return html`
             <style>
-                :host {
-                    display: block;
-                }
                 iron-collapse {
                     box-shadow: 6px;
                 }
@@ -24,20 +21,18 @@ class SearchEscape extends PolymerElement {
                     text-transform: none;
                 }
             </style>
-            <div class="card">
-                <paper-input label="{{label}}"></paper-input>
-                <iron-collapse id="collapse">
-                    <paper-material>
-                        <div>
-                            <template id="resultList" is="dom-repeat" items="{{choices}}" filter="_listFilter">
-                                <paper-item>
-                                    <paper-button on-tap="_selectItem">{{item.name}}</paper-button>
-                                </paper-item>
-                            </template>
-                        </div>
-                    </paper-material>
-                </iron-collapse>
-            </div>
+            <paper-input label="{{label}}" value="{{searchValue}}"></paper-input>
+            <iron-collapse id="collapse">
+                <paper-material>
+                    <div>
+                        <template id="resultList" is="dom-repeat" items="{{choices}}">
+                            <paper-item>
+                                <paper-button on-tap="_selectItem">{{item.name.es}}</paper-button>
+                            </paper-item>
+                        </template>
+                    </div>
+                </paper-material>
+            </iron-collapse>
         `;
     }
 
@@ -53,8 +48,12 @@ class SearchEscape extends PolymerElement {
             searchValue: {
                 type: String,
                 value: '',
-                observer: "_valueChanged"
-            }
+                observer(newValue, oldValue){
+                    if(newValue !== oldValue && !this.isSelected) this._valueChanged();
+                    else this.isSelected = false;
+                }
+            },
+            isSelected: Boolean
         }
     }
 
@@ -63,16 +62,25 @@ class SearchEscape extends PolymerElement {
     }
 
     _valueChanged(e) {
-        if(this.searchValue.length > 3){
-            let data = firebase.database().ref('games').startAt(this.searchValue);
-            let collapse = this.$.collapse
-            if (e != '' && !collapse.opened) {
-                this.$.resultList.render()
-                collapse.toggle()
-            } else
-            if (e == '' && collapse.opened) {
-                collapse.toggle()
+        if(this.searchValue.length > 2){
+            firebase.database().ref('games').orderByChild('name/es').startAt(this.searchValue).endAt(this.searchValue+ '\uf8ff').limitToFirst(5).on('value', snapshot => {
+                this.choices = Object.values(snapshot.val());
+                let collapse = this.$.collapse;
+                if (this.choices.length>0) {
+                    if(!collapse.opened) {
+                        this.$.collapse.toggle();
+                    }
+                    this.$.resultList.render();
+                }
+            });
+        }
+        else{
+            this.choices = [];
+            let collapse = this.$.collapse;
+            if(!collapse.opened) {
+                this.$.collapse.toggle();
             }
+            this.$.resultList.render();
         }
     }
 
@@ -84,9 +92,10 @@ class SearchEscape extends PolymerElement {
 
     _selectItem(event) {
         var collapse = this.$.collapse;
-        this.set('searchValue', event.model.item.name)
-        this.set('itemValue', event.model.item)
-        collapse.toggle()
+        this.set('isSelected', true);
+        this.set('searchValue', event.model.item.name.es);
+        this.set('itemValue', event.model.item);
+        collapse.toggle();
     }
 
 }
