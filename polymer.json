@@ -1,4 +1,13 @@
 {
+  "entrypoint": "index.html",
+  "shell": "src/escape-route-app/escape-route-app.js",
+  "extraDependencies": [
+    "manifest.json",
+    "node_modules/@webcomponents/webcomponentsjs/*.js",
+    "!node_modules/@webcomponents/webcomponentsjs/gulpfile.js",
+    "node_modules/@webcomponents/webcomponentsjs/bundles/*.js"
+  ],
+  "moduleResolution": "node",
   "npm": true,
   "lint": {
     "rules": [

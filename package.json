@@ -2,7 +2,14 @@
   "name": "escape-route",
   "description": "escape route app",
   "dependencies": {
-    "@polymer/polymer": "^3.0.0"
+    "@polymer/iron-collapse": "^3.0.0-pre.19",
+    "@polymer/iron-flex-layout": "^3.0.0-pre.19",
+    "@polymer/paper-button": "^3.0.0-pre.19",
+    "@polymer/paper-input": "^3.0.0-pre.19",
+    "@polymer/paper-item": "^3.0.0-pre.19",
+    "@polymer/paper-material": "^3.0.0-pre.19",
+    "@polymer/polymer": "^3.0.2",
+    "polymer-cli": "^1.7.1"
   },
   "devDependencies": {
     "@webcomponents/webcomponentsjs": "^2.0.0",
