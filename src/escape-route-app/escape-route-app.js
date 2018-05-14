@@ -1,6 +1,8 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '../login/login-module.js';
 
+import '../components/search-escape.js';
+
 /**
  * @customElement
  * @polymer
@@ -31,9 +33,11 @@ class EscapeRouteApp extends PolymerElement {
               <h1>Escape Route</h1>
               <login-module></login-module>
             </div>
+            <search-escape label="Escape"></search-escape>
           </iron-pages>
         </app-header-layout>
       </app-drawer-layout>
+      
     `;
   }
 
