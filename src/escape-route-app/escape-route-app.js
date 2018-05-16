@@ -88,7 +88,7 @@ class EscapeRouteApp extends PolymerElement {
           <app-toolbar>Menu</app-toolbar>
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
             <a name="login" href="[[rootPath]]login">Login</a>
-            <a name="search" href="[[rootPath]]search">Search</a>
+            <a name="review" href="[[rootPath]]review">Review</a>
             <a name="mates" href="[[rootPath]]mates">Mates</a>
           </iron-selector>
         </app-drawer>
@@ -105,11 +105,12 @@ class EscapeRouteApp extends PolymerElement {
 
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
             <login-module name="login" on-logged="_alreadyLogged"></login-module>
-            <search-escape name="search" label="Escape"></search-escape>
+            <user-review name="review"></<user-review>
             <escape-mates name="mates"></escape-mates>
           </iron-pages>
         </app-header-layout>
       </app-drawer-layout>
+
     `;
   }
 
@@ -157,7 +158,7 @@ class EscapeRouteApp extends PolymerElement {
     if(!this.appInitialized){
       this._initializeFirebaseApp();
     }
-    if (['search', 'mates'].indexOf(page) !== -1) {
+    if (['review', 'mates'].indexOf(page) !== -1) {
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
           this.page = page;
@@ -184,8 +185,8 @@ class EscapeRouteApp extends PolymerElement {
       case 'login':
         import('../login/login-module.js');
         break;
-      case 'search':
-        import('../components/search-escape.js');
+      case 'review':
+        import('../views/user-review.js');
         break;
       case 'mates':
         import('../mates/escape-mates.js');
