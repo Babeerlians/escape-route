@@ -37,11 +37,16 @@ class EscapeMates extends PolymerElement {
             </iron-flex-layout>
         </div>
         <div class="card">
-            <iron-list items="[[mates]]" as="mate">
-                <template>
-                    <p>[[mate.displayName]]</p>
-                </template>
-            </iron-list>
+            <h3>Mates</h3>
+            <ul>
+            <template id="matesList" is="dom-repeat" items="[[mates]]" as="mate">
+                <li>
+                    <p>Name: [[mate.displayName]]</p>
+                    <p>email: [[mate.email]]</p>
+                </li>
+            </template>
+            </ui>
+            <paper-button></paper-button>
         </div>
         `;
     }
@@ -50,8 +55,7 @@ class EscapeMates extends PolymerElement {
         return {
             user: String,
             mates: {
-                type: Array,
-                reflectToAttribute: true
+                type: Array
             }
         }
     }
@@ -72,8 +76,8 @@ class EscapeMates extends PolymerElement {
                     usersObject.mates.map(mate=>{
                         firebase.database().ref('users/'+mate.uid).on('value', mateSnapshot => {
                             this.mates.push(mateSnapshot.val());
+                            this.$.matesList.render();
                         });
-                        console.log('mates', this.mates);
                     });
                 });
             } else {
