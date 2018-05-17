@@ -19,7 +19,7 @@ class UserReview extends PolymerElement {
                 @media (max-width: 640px){
                     #review {
                         flex-direction: column;
-                    }   
+                    }
                 }
             </style>
             <div id="review" class="card">
