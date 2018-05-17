@@ -21,6 +21,7 @@ import '@polymer/app-route/app-route.js';
 import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@polymer/paper-button/paper-button.js';
 import '../styles/escape-icons.js';
 
 // Gesture events like tap and track generated from touch will not be
@@ -95,6 +96,7 @@ class EscapeRouteApp extends PolymerElement {
           <app-toolbar>Menu</app-toolbar>
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
             <a name="login" href="[[rootPath]]login">Login</a>
+            <a name="route" href="[[rootPath]]route">Route</a>
             <a name="review" href="[[rootPath]]review">Review</a>
             <a name="mates" href="[[rootPath]]mates">Mates</a>
           </iron-selector>
@@ -113,6 +115,7 @@ class EscapeRouteApp extends PolymerElement {
       
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
             <login-module name="login" on-logged="_alreadyLogged"></login-module>
+            <user-route name="route"></escape-route>
             <user-review name="review"></user-review>
             <escape-mates name="mates"></escape-mates>
           </iron-pages>
@@ -166,12 +169,13 @@ class EscapeRouteApp extends PolymerElement {
     if (!this.appInitialized) {
       this._initializeFirebaseApp();
     }
-    if (['review', 'mates'].indexOf(page) !== -1) {
+    if (['review', 'route', 'mates'].indexOf(page) !== -1) {
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
           this.page = page;
         } else {
           this.page = 'login';
+          this.set('route.path', 'login');
         }
       });
     } else {
@@ -185,7 +189,7 @@ class EscapeRouteApp extends PolymerElement {
   }
 
   _alreadyLogged(e) {
-    this.set('route.path', 'mates');
+    this.set('route.path', 'route');
   }
 
   _pageChanged(page) {
@@ -195,6 +199,9 @@ class EscapeRouteApp extends PolymerElement {
         break;
       case 'review':
         import('../views/user-review.js');
+        break;
+      case 'route':
+        import('../views/user-route.js');
         break;
       case 'mates':
         import('../mates/escape-mates.js');

@@ -12,7 +12,6 @@ class EscapeMates extends PolymerElement {
             :host {
                 display: block;
             }
-        
             .circle {
                 display: inline-block;
                 float: right;

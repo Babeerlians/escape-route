@@ -1,10 +1,13 @@
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import {
+  PolymerElement,
+  html
+} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
 
 class IconToggle extends PolymerElement {
   static get template() {
-    return html`
+    return html `
         <style>
           :host {
             display: block;
@@ -18,9 +21,9 @@ class IconToggle extends PolymerElement {
           }
           div > iron-icon.pressed{
             fill: var(--icon-toggle-pressed-color, currentcolor);
-          }
-          div:hover {
-            cursor:pointer;
+          }         
+          div {
+            cursor: pointer;
           }
           div:hover > iron-icon{
             fill: var(--icon-toggle-pressed-color, currentcolor);
@@ -40,7 +43,7 @@ class IconToggle extends PolymerElement {
         </div>
     `;
   }
-  static get properties () {
+  static get properties() {
     return {
       total: {
         type: Number
@@ -71,14 +74,17 @@ class IconToggle extends PolymerElement {
   ready() {
     super.ready();
     this.icons = [];
-    for(let i = 1; i <= this.total; i++){
-      this.icons.push({icon:this.icon,value:i});
+    for (let i = 1; i <= this.total; i++) {
+      this.icons.push({
+        icon: this.icon,
+        value: i
+      });
     }
     this._renderList();
   }
 
   _renderList() {
-    this.icons.sort((a,b)=>a.value>b.value);
+    this.icons.sort((a, b) => a.value > b.value);
     this.$.iconsList.render();
     this._markPressedIcons();
   }
@@ -87,15 +93,16 @@ class IconToggle extends PolymerElement {
     for (let icon of icons) {
       if (icon.value <= this.value) {
         icon.classList.add('pressed');
-      }
-      else
+      } else
         icon.classList.remove('pressed');
     }
   }
 
   toggle(e) {
-    this.value = e.target.value;
-    this._markPressedIcons();
+    if (!this.attributes.readonly) {
+      this.value = e.target.value;
+      this._markPressedIcons();
+    }
   }
 }
 
