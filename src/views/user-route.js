@@ -16,8 +16,8 @@ class UserRoute extends PolymerElement {
             </style>
             <div class="card">
                 <iron-flex-layout>
-                    <iron-image class="circle" alt="user profile picture" src="{{user.photoURL}}" sizing="cover"></iron-image>
-                    <paper-input readonly label="name" value="{{user.displayName}}"></paper-input>
+                    <iron-image class="circle" alt="user profile picture" src="[[user.photoURL]]" sizing="cover"></iron-image>
+                    <paper-input readonly label="name" value="[[user.displayName]]"></paper-input>
                 </iron-flex-layout>
                 <ul>
                     <template id="reviews" is="dom-repeat" items="[[reviews]]" as="review">
@@ -39,6 +39,7 @@ class UserRoute extends PolymerElement {
 
     static get properties() {
         return {
+            user: String,
             reviews: {
                 type: Array
             }
