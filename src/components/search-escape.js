@@ -25,8 +25,12 @@ class SearchEscape extends PolymerElement {
                     width: 100%;
                     text-transform: none;
                 }
+                paper-input {
+                    background-color: whitesmoke
+                }
             </style>
-            <div class="card">
+            <div>
+                <h2>{{title}}</h2>
                 <paper-input label="{{label}}" value="{{searchValue}}"></paper-input>
                 <iron-collapse id="collapse">
                     <paper-material>
@@ -60,7 +64,8 @@ class SearchEscape extends PolymerElement {
                     else this.isSelected = false;
                 }
             },
-            isSelected: Boolean
+            isSelected: Boolean,
+            title: String
         }
     }
 
