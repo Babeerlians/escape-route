@@ -13,11 +13,6 @@ class EscapeMates extends PolymerElement {
                 display: block;
             }
         
-            paper-button.red {
-                background-color: red;
-                color: white;
-            }
-        
             .circle {
                 display: inline-block;
                 float: right;
@@ -28,9 +23,9 @@ class EscapeMates extends PolymerElement {
             }
         </style>
         <div class="card">
-            <paper-button raised noink class="red" on-click="logout">Log out</paper-button>
             <iron-flex-layout>
                 <iron-image class="circle" alt="user profile picture" src="{{user.photoURL}}" sizing="cover"></iron-image>
+                <h2>Personal data</h2>
                 <paper-input readonly label="name" value="{{user.displayName}}"></paper-input>
                 <paper-input readonly label="email" value="{{user.email}}"></paper-input>
                 <paper-input readonly label="uid" value="{{user.uid}}"></paper-input>
@@ -39,14 +34,14 @@ class EscapeMates extends PolymerElement {
         <div class="card">
             <h3>Mates</h3>
             <ul>
-            <template id="matesList" is="dom-repeat" items="[[mates]]" as="mate">
-                <li>
-                    <p>Name: [[mate.displayName]]</p>
-                    <p>email: [[mate.email]]</p>
-                </li>
-            </template>
-            </ui>
-            <paper-button></paper-button>
+                <template id="matesList" is="dom-repeat" items="[[mates]]" as="mate">
+                    <li>
+                        <p>Name: [[mate.displayName]]</p>
+                        <p>email: [[mate.email]]</p>
+                    </li>
+                </template>
+                </ui>
+                <paper-button></paper-button>
         </div>
         `;
     }
@@ -60,20 +55,20 @@ class EscapeMates extends PolymerElement {
         }
     }
 
-    ready(){
+    ready() {
         super.ready();
         this._getMates();
     }
 
     _getMates() {
-        this.mates=[];
+        this.mates = [];
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 this.user = user;
-                firebase.database().ref('users/'+this.user.uid).on('value', snapshot => {
+                firebase.database().ref('users/' + this.user.uid).on('value', snapshot => {
                     let usersObject = snapshot.val();
-                    usersObject.mates.map(mate=>{
-                        firebase.database().ref('users/'+mate.uid).on('value', mateSnapshot => {
+                    usersObject.mates.map(mate => {
+                        firebase.database().ref('users/' + mate.uid).on('value', mateSnapshot => {
                             this.mates.push(mateSnapshot.val());
                             this.$.matesList.render();
                         });
@@ -85,15 +80,6 @@ class EscapeMates extends PolymerElement {
         });
     }
 
-    logout() {
-        firebase.auth().signOut().then(() => {
-            console.log("chao");
-            this.user = undefined;
-            this.mates = [];
-        }, function (error) {
-            console.log("sigues logueado");
-        });
-    }
 }
 
 
