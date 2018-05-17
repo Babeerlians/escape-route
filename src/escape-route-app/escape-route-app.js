@@ -38,27 +38,27 @@ class EscapeRouteApp extends PolymerElement {
         :host {
           --app-primary-color: #555;
           --app-secondary-color: black;
-
+      
           display: block;
         }
-
+      
         app-drawer-layout:not([narrow]) [drawer-toggle] {
           display: none;
         }
-
+      
         app-header {
           color: #fff;
           background-color: var(--app-primary-color);
         }
-
+      
         app-header paper-icon-button {
           --paper-icon-button-ink-color: white;
         }
-
+      
         .drawer-list {
           margin: 0 20px;
         }
-
+      
         .drawer-list a {
           display: block;
           padding: 0 16px;
@@ -66,22 +66,29 @@ class EscapeRouteApp extends PolymerElement {
           color: var(--app-secondary-color);
           line-height: 40px;
         }
-
+      
         .drawer-list a.iron-selected {
           color: black;
           font-weight: bold;
         }
+      
         a.logged {
           display: none;
         }
+      
+        paper-button.red {
+          background-color: red;
+          color: white;
+          float: right;
+        }
       </style>
-
+      
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
       </app-location>
-
+      
       <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
       </app-route>
-
+      
       <app-drawer-layout fullbleed="" narrow="{{narrow}}">
         <!-- Drawer content -->
         <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
@@ -92,20 +99,21 @@ class EscapeRouteApp extends PolymerElement {
             <a name="mates" href="[[rootPath]]mates">Mates</a>
           </iron-selector>
         </app-drawer>
-
+      
         <!-- Main content -->
         <app-header-layout has-scrolling-region="">
-
+      
           <app-header slot="header" condenses="" reveals="" effects="waterfall">
             <app-toolbar>
               <paper-icon-button icon="escape-icons:menu" drawer-toggle=""></paper-icon-button>
               <div main-title="">Escape route</div>
+              <paper-button raised noink class="red" on-click="logout">Log out</paper-button>
             </app-toolbar>
           </app-header>
-
+      
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
             <login-module name="login" on-logged="_alreadyLogged"></login-module>
-            <user-review name="review"></<user-review>
+            <user-review name="review"></user-review>
             <escape-mates name="mates"></escape-mates>
           </iron-pages>
         </app-header-layout>
@@ -139,7 +147,7 @@ class EscapeRouteApp extends PolymerElement {
   }
 
   _initializeFirebaseApp() {
-    if(!this.appInitialized){
+    if (!this.appInitialized) {
       var config = {
         apiKey: "AIzaSyD67FXv2kXAFAFTITru3_UH63VXeYQRURk",
         authDomain: "escape-route-5e029.firebaseapp.com",
@@ -149,13 +157,13 @@ class EscapeRouteApp extends PolymerElement {
         messagingSenderId: "372037266043"
       };
       firebase.initializeApp(config);
-      this.appInitialized= true;
+      this.appInitialized = true;
     }
   }
 
 
   _routePageChanged(page) {
-    if(!this.appInitialized){
+    if (!this.appInitialized) {
       this._initializeFirebaseApp();
     }
     if (['review', 'mates'].indexOf(page) !== -1) {
@@ -176,7 +184,7 @@ class EscapeRouteApp extends PolymerElement {
     }
   }
 
-  _alreadyLogged(e){
+  _alreadyLogged(e) {
     this.set('route.path', 'mates');
   }
 
@@ -193,6 +201,17 @@ class EscapeRouteApp extends PolymerElement {
         break;
     }
   }
+
+  logout() {
+    firebase.auth().signOut().then(() => {
+      console.log("chao");
+      this.user = undefined;
+      this.mates = [];
+    }, function (error) {
+      console.log("sigues logueado");
+    });
+  }
+
 }
 
 window.customElements.define('escape-route-app', EscapeRouteApp);

@@ -50,6 +50,11 @@ class UserReview extends PolymerElement {
                 paper-textarea {
                     background-color: whitesmoke
                 }
+                @media (max-width: 640px){
+                    #review {
+                        flex-direction: column;
+                    }
+                }
             </style>
             <div id="review" class="card">
                 <div id="search">
