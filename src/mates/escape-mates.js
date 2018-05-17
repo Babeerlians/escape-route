@@ -62,28 +62,25 @@ class EscapeMates extends PolymerElement {
 
     ready(){
         super.ready();
-        //this._getMates();
+        this._getMates();
     }
 
     _getMates() {
         this.mates=[];
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
-                //console.log(user);
                 this.user = user;
                 firebase.database().ref('users/'+this.user.uid).on('value', snapshot => {
                     let usersObject = snapshot.val();
-                    console.log('usersObject', usersObject);
                     usersObject.mates.map(mate=>{
                         firebase.database().ref('users/'+mate.uid).on('value', mateSnapshot => {
                             this.mates.push(mateSnapshot.val());
                             this.$.matesList.render();
-                            console.log('mates', this.mates);
                         });
                     });
                 });
             } else {
-                console.log("error de mates");
+                console.log("Error de mates");
             }
         });
     }

@@ -11,11 +11,15 @@ class UserReview extends PolymerElement {
                     display: flex;
                 }
                 #notes {
-                    width: 60%;
+                    width: 100%;
                 }
                 #valorations {
-                    width: 30%;
                     margin-left: 10%;
+                }
+                @media (max-width: 640px){
+                    #review {
+                        flex-direction: column;
+                    }   
                 }
             </style>
             <div id="review" class="card">
