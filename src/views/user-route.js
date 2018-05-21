@@ -22,7 +22,7 @@ class UserRoute extends PolymerElement {
                 <ul>
                     <template id="reviews" is="dom-repeat" items="[[reviews]]" as="review">
                         <li>
-                            <h3>[[review.game]]</h3>
+                            <h3>[[review.game.name.es]]</h3>
                             <p>Notes: [[review.note]]</p>
                             <div class="valorations">
                                 <icon-toggle total=5 icon="star" readonly value="[[review.valorations.general]]" title="General"></icon-toggle>
@@ -51,13 +51,20 @@ class UserRoute extends PolymerElement {
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 this.user = user;
-                firebase.database().ref('users/' + this.user.uid+'/reviews').on('value', snapshot => {
+                this.reviews = [];
+                firebase.database().ref('users/' + this.user.uid + '/reviews').on('value', snapshot => {
                     let reviews = snapshot.val();
-                    for (let key in reviews){
-                       reviews[key].game = key;
+                    for (let key in reviews) {
+                        reviews[key].key = key;
                     }
-                    this.reviews = Object.values(reviews);
-                    this.$.reviews.render();
+                    reviews = reviews && Object.values(reviews);
+                    reviews.map(review => {
+                       firebase.database().ref('games').orderByChild('id').equalTo(review.key).on('value', snapshot => {
+                            review.game =  Object.values(snapshot.val())[0];
+                            this.reviews.push(review);
+                            this.$.reviews.render();
+                        });
+                    });
                 });
             }
         });

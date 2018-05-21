@@ -39,7 +39,7 @@ class EscapeRouteApp extends PolymerElement {
         :host {
           --app-primary-color: #555;
           --app-secondary-color: black;
-      
+          --app-drawer-width: 150px;
           display: block;
         }
       
@@ -55,7 +55,7 @@ class EscapeRouteApp extends PolymerElement {
         app-header paper-icon-button {
           --paper-icon-button-ink-color: white;
         }
-      
+
         .drawer-list {
           margin: 0 20px;
         }
@@ -69,12 +69,7 @@ class EscapeRouteApp extends PolymerElement {
         }
       
         .drawer-list a.iron-selected {
-          color: black;
           font-weight: bold;
-        }
-      
-        a.logged {
-          display: none;
         }
       
         paper-button.red {
@@ -115,7 +110,7 @@ class EscapeRouteApp extends PolymerElement {
       
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
             <login-module name="login" on-logged="_alreadyLogged"></login-module>
-            <user-route name="route"></escape-route>
+            <user-route name="route"></user-route>
             <user-review name="review"></user-review>
             <escape-mates name="mates"></escape-mates>
           </iron-pages>
@@ -180,6 +175,7 @@ class EscapeRouteApp extends PolymerElement {
       });
     } else {
       this.page = 'login';
+      this.set('route.path', 'login');
     }
 
     // Close a non-persistent drawer when the page & route are changed.
