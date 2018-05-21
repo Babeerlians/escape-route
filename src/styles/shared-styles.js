@@ -25,6 +25,10 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         line-height: 64px;
       }
 
+      .hidden {
+        display: none;
+      }
+
       h1 {
         margin: 16px 0;
         color: #212121;

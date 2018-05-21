@@ -47,6 +47,12 @@ class EscapeRouteApp extends PolymerElement {
           display: none;
         }
       
+        @media (min-width: 640px) {
+          app-drawer {
+            z-index:0;
+          }
+        }
+
         app-header {
           color: #fff;
           background-color: var(--app-primary-color);
@@ -109,9 +115,9 @@ class EscapeRouteApp extends PolymerElement {
           </app-header>
       
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
-            <login-module name="login" on-logged="_alreadyLogged"></login-module>
+            <login-module name="login" on-logged="_navigateToRoute"></login-module>
             <user-route name="route"></user-route>
-            <user-review name="review"></user-review>
+            <user-review name="review" on-saved="_navigateToRoute"></user-review>
             <escape-mates name="mates"></escape-mates>
           </iron-pages>
         </app-header-layout>
@@ -184,7 +190,7 @@ class EscapeRouteApp extends PolymerElement {
     }
   }
 
-  _alreadyLogged(e) {
+  _navigateToRoute(e) {
     this.set('route.path', 'route');
   }
 
