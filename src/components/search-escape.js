@@ -75,9 +75,7 @@ class SearchEscape extends PolymerElement {
         return {
             choices: [],
             label: String,
-            itemValue: {
-                type: Object,
-            },
+            itemValue: Object,
             searchValue: {
                 type: String,
                 value: '',
@@ -87,12 +85,12 @@ class SearchEscape extends PolymerElement {
                 }
             },
             isSelected: Boolean,
-            title: String
+            title: String,
+            idescape: {
+                type: String,
+                notify: true
+            }
         }
-    }
-
-    ready() {
-        super.ready();
     }
 
     _valueChanged(e) {
@@ -118,17 +116,12 @@ class SearchEscape extends PolymerElement {
         }
     }
 
-    _listFilter(item) {
-        return item.name.toLowerCase().includes(
-            this.searchValue.toLowerCase()
-        )
-    }
-
     _selectItem(event) {
         var collapse = this.$.collapse;
         this.set('isSelected', true);
         this.set('searchValue', event.model.item.name.es);
         this.set('itemValue', event.model.item);
+        this.set('idescape', event.model.item.id);
         collapse.toggle();
         this.$.inputWithButton.classList.remove("hidden");
         this.$.inputSearch.toggleClass("hidden");
@@ -136,6 +129,8 @@ class SearchEscape extends PolymerElement {
 
     _clearInput(event) {
         this.set('searchValue', '');
+        this.set('itemValue', {});
+        this.set('idescape', '');
         this.$.inputWithButton.classList.add("hidden");
         this.$.inputSearch.toggleClass("hidden");
     }
@@ -150,8 +145,6 @@ class SearchEscape extends PolymerElement {
           position: uluru,
           map: map
         });
-        /*let body = document.querySelector('body');
-        body.appendChild(this.$.escape);*/
         this.$.escape.open();
     }
 

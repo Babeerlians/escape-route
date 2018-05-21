@@ -122,7 +122,7 @@ class EscapeRouteApp extends PolymerElement {
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
             <login-module name="login" on-logged="_alreadyLogged"></login-module>
             <user-route name="route"></user-route>
-            <user-review name="review"></user-review>
+            <user-review name="review" on-logged="_alreadyLogged"></user-review>
             <escape-mates name="mates"></escape-mates>
           </iron-pages>
         </app-header-layout>

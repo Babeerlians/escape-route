@@ -68,25 +68,28 @@ class UserReview extends PolymerElement {
                     font-weight: bold;
                     margin-top: 20px;
                 }
+                .submit[disabled] {
+                    opacity: 0.5;
+                }
             </style>
             <div class="card">
                 <div class="search">
-                    <search-escape title="Escape Room"></search-escape>
+                    <search-escape id="searchEscape" idescape="{{idescape}}" title="Escape Room"></search-escape>
                 </div>
                 <div class="review">
                     <div class="notes">
                         <h2>Note</h2>
-                        <paper-textarea placeholder="¿Te ha gustado el juego?¿Lo recomendarías? ¿Qué es lo mejor que tiene y qué destacarías? ¿Tiene algo que no te haya gustado?¿Qué cambios o mejoras sugerirías?" 
-                        rows=4 maxlength=300></paper-textarea>
+                        <paper-textarea id="tanotes" placeholder="¿Te ha gustado el juego?¿Lo recomendarías? ¿Qué es lo mejor que tiene y qué destacarías? ¿Tiene algo que no te haya gustado?¿Qué cambios o mejoras sugerirías?" 
+                        rows=4 maxlength=300 value="{{note}}"></paper-textarea>
                     </div>
                     <div class="valorations">
-                        <icon-toggle total=5 icon="star" value=0 title="Punctuation"></icon-toggle>
-                        <icon-toggle total=5 icon="lock" value=0 title="Difficulty"></icon-toggle>
-                        <icon-toggle total=5 icon="home" value=0 title="Ambience"></icon-toggle>
+                        <icon-toggle id="general" total=5 icon="star" value={{general}} title="General"></icon-toggle>
+                        <icon-toggle id="difficulty" total=5 icon="lock" value={{difficulty}} title="Difficulty"></icon-toggle>
+                        <icon-toggle id="ambiance" total=5 icon="home" value={{ambiance}} title="Ambience"></icon-toggle>
                     </div>
                 </div>
                 <div class="buttons">
-                    <paper-button raised class="submit" disabled="[[isDisabled(invalid, value)]]" on-click="_saveReview">SAVE</paper-button>
+                    <paper-button id="btnSave" raised class="submit" disabled="true" on-click="_saveReview">SAVE</paper-button>
                 </div>
             </div>
         `;
@@ -94,14 +97,65 @@ class UserReview extends PolymerElement {
 
     static get is() { return 'user-review'; }
 
-    static get properties() { 
+    static get properties() {
         return {
-            value: {
-                type: Number
+            general: {
+                type: Number,
+                value: 0
+            },
+            difficulty: {
+                type: Number,
+                value: 0
+            },
+            ambiance: {
+                type: Number,
+                value: 0
+            },
+            note: {
+                type: String
+            },
+            idescape: {
+                type: String
             }
         }
     }
 
+    static get observers() {
+        return [
+            'validate(general, difficulty, ambiance, note, idescape)'
+        ]
+    }
+
+    validate(general, difficulty, ambiance, note, idescape) {
+        if(general > 0 && difficulty > 0 && ambiance > 0 && note.length > 0 && idescape.length > 0){
+            this.$.btnSave.removeAttribute('disabled');
+        }
+        else {
+            this.$.btnSave.setAttribute('disabled',true)
+        }
+    }
+
+    _saveReview() {
+        var review = new Object(),id;
+        id = this.idescape;
+        review[id] = new Object();
+        review[id].valorations = new Object();
+        review[id].valorations.general = this.general;
+        review[id].valorations.difficulty = this.difficulty;
+        review[id].valorations.ambience = this.ambiance;
+        review[id].note = this.note;
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                firebase.database().ref('users/' + user.uid+'/reviews').update(review).then( () => {
+                    this.dispatchEvent(new CustomEvent('logged'));
+                })
+                .catch( (error) => {
+                    console.log('Synchronization failed');
+                });;
+            }
+        });
+    }
+
 }
 
-customElements.define('user-review', UserReview);
+customElements.define(UserReview.is, UserReview);
