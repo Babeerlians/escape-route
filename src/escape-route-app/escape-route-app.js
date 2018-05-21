@@ -47,6 +47,12 @@ class EscapeRouteApp extends PolymerElement {
           display: none;
         }
       
+        @media (min-width: 640px) {
+          app-drawer {
+            z-index:0;
+          }
+        }
+
         app-header {
           color: #fff;
           background-color: var(--app-primary-color);
@@ -115,7 +121,7 @@ class EscapeRouteApp extends PolymerElement {
       
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
             <login-module name="login" on-logged="_alreadyLogged"></login-module>
-            <user-route name="route"></escape-route>
+            <user-route name="route"></user-route>
             <user-review name="review"></user-review>
             <escape-mates name="mates"></escape-mates>
           </iron-pages>

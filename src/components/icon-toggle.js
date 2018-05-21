@@ -1,7 +1,4 @@
-import {
-  PolymerElement,
-  html
-} from '@polymer/polymer/polymer-element.js';
+import { PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
 
@@ -50,7 +47,8 @@ class IconToggle extends PolymerElement {
       },
       value: {
         type: Number,
-        value: 0
+        value: 0,
+        notify: true
       },
       icon: {
         type: String
