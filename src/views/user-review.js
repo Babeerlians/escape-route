@@ -6,7 +6,7 @@ import '../styles/shared-styles.js';
 
 class UserReview extends PolymerElement {
     static get template() {
-        return html`
+        return html `
             <style include="shared-styles">
                 .valorations {
                     display: flex;
@@ -63,8 +63,8 @@ class UserReview extends PolymerElement {
                     justify-content: center
                 }
                 .submit {
-                    background-color: CornflowerBlue;
-                    color: black;
+                    background-color: red;
+                    color: white;
                     font-weight: bold;
                     margin-top: 20px;
                 }
@@ -95,7 +95,9 @@ class UserReview extends PolymerElement {
         `;
     }
 
-    static get is() { return 'user-review'; }
+    static get is() {
+        return 'user-review';
+    }
 
     static get properties() {
         return {
@@ -127,16 +129,16 @@ class UserReview extends PolymerElement {
     }
 
     validate(general, difficulty, ambiance, note, idescape) {
-        if(general > 0 && difficulty > 0 && ambiance > 0 && note.length > 0 && idescape.length > 0){
+        if (general > 0 && difficulty > 0 && ambiance > 0 && note.length > 0 && idescape.length > 0) {
             this.$.btnSave.removeAttribute('disabled');
-        }
-        else {
-            this.$.btnSave.setAttribute('disabled',true)
+        } else {
+            this.$.btnSave.setAttribute('disabled', true)
         }
     }
 
     _saveReview() {
-        var review = new Object(),id;
+        var review = new Object(),
+            id;
         id = this.idescape;
         review[id] = new Object();
         review[id].valorations = new Object();
@@ -146,12 +148,12 @@ class UserReview extends PolymerElement {
         review[id].note = this.note;
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
-                firebase.database().ref('users/' + user.uid+'/reviews').update(review).then( () => {
+                firebase.database().ref('users/' + user.uid + '/reviews').update(review).then(() => {
                     this.dispatchEvent(new CustomEvent('saved'));
-                })
-                .catch( (error) => {
-                    console.log('Synchronization failed');
-                });;
+                    })
+                    .catch((error) => {
+                        console.log('Synchronization failed');
+                    });
             }
         });
     }
