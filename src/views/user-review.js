@@ -162,4 +162,4 @@ class UserReview extends PolymerElement {
 
 }
 
-customElements.define(UserReview.is, UserReview);
+window.customElements.define(UserReview.is, UserReview);

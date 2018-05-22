@@ -1,6 +1,11 @@
 {
   "entrypoint": "index.html",
   "shell": "src/escape-route-app/escape-route-app.js",
+  "sources": [
+    "src/**.js",
+    "manifest/**",
+    "package.json"
+  ],
   "extraDependencies": [
     "manifest.json",
     "node_modules/@webcomponents/webcomponentsjs/*.js",

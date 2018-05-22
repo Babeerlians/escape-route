@@ -3,18 +3,15 @@ import {
     PolymerElement
 } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-button/paper-button.js';
+import '../styles/shared-styles.js';
 
 // define the element's class element
 class LoginButton extends PolymerElement {
     static get template() {
-        return html `
-        <style is="custom-style">
+        return html`
+         <style include="shared-styles">
             :host {
                 display: block;
-            }
-            paper-button.red {
-                background-color: red;
-                color: white;
             }
         </style>
         <paper-button raised noink class="red" on-click="logIn">Login with Google</paper-button>

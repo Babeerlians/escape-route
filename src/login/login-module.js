@@ -38,7 +38,6 @@ class LoginModule extends PolymerElement {
   }
 
   _manageLoginUser(event) {
-    console.log('Login module user', event.detail.user);
     firebase.database().ref('users/' + event.detail.user.uid).on('value', snapshot => {
       if (!snapshot.val()) {
         const user = {
