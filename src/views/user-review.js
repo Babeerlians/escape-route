@@ -3,6 +3,7 @@ import {
     PolymerElement
 } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-input/paper-textarea.js';
+import '@polymer/paper-button/paper-button.js';
 import '../components/icon-toggle.js';
 import '../components/search-escape.js'
 import '../styles/shared-styles.js';
