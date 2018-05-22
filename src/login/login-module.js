@@ -14,8 +14,6 @@ class LoginModule extends PolymerElement {
        <style include="shared-styles">
         :host {
           display: block;
-
-          padding: 10px;
         }
       </style>
       <div class="card">
