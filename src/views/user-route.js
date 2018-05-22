@@ -27,7 +27,7 @@ class UserRoute extends PolymerElement {
                 <ul>
                     <template id="reviews" is="dom-repeat" items="[[reviews]]" as="review">
                         <li>
-                            <h3>[[review.game.name.es]]</h3>
+                            <h1>[[review.game.name.es]]</h1>
                             <p>Notes: [[review.note]]</p>
                             <div class="valorations">
                                 <icon-toggle total=5 icon="star" readonly value="[[review.valorations.general]]" title="General"></icon-toggle>

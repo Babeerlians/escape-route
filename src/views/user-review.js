@@ -64,7 +64,7 @@ class UserReview extends PolymerElement {
                 }
                 .buttons {
                     display: flex;
-                    justify-content: center
+                    justify-content: space-evenly;
                 }
                 .submit {
                     background-color: red;
@@ -89,11 +89,12 @@ class UserReview extends PolymerElement {
                     <div class="valorations">
                         <icon-toggle id="general" total=5 icon="star" value={{general}} title="General"></icon-toggle>
                         <icon-toggle id="difficulty" total=5 icon="lock" value={{difficulty}} title="Difficulty"></icon-toggle>
-                        <icon-toggle id="ambiance" total=5 icon="home" value={{ambiance}} title="Ambience"></icon-toggle>
+                        <icon-toggle id="ambience" total=5 icon="home" value={{ambience}} title="Ambience"></icon-toggle>
                     </div>
                 </div>
                 <div class="buttons">
-                    <paper-button id="btnSave" raised class="submit" disabled="true" on-click="_saveReview">SAVE</paper-button>
+                    <paper-button raised class="submit" on-click="_discardReview">Discard</paper-button>
+                    <paper-button id="btnSave" raised class="submit" disabled="true" on-click="_saveReview">Save</paper-button>
                 </div>
             </div>
         `;
@@ -113,7 +114,7 @@ class UserReview extends PolymerElement {
                 type: Number,
                 value: 0
             },
-            ambiance: {
+            ambience: {
                 type: Number,
                 value: 0
             },
@@ -130,29 +131,34 @@ class UserReview extends PolymerElement {
 
     static get observers() {
         return [
-            'validate(general, difficulty, ambiance, note, idescape)'
+            'validate(general, difficulty, ambience, note, idescape)'
         ]
     }
 
-    validate(general, difficulty, ambiance, note, idescape) {
-        if (general > 0 && difficulty > 0 && ambiance > 0 && note.length > 0 && idescape.length > 0) {
+    validate(general, difficulty, ambience, note, idescape) {
+        if (general > 0 && difficulty > 0 && ambience > 0 && note.length > 0 && idescape.length > 0) {
             this.$.btnSave.removeAttribute('disabled');
         } else {
             this.$.btnSave.setAttribute('disabled', true)
         }
     }
 
+    _discardReview() {
+        this.dispatchEvent(new CustomEvent('discarded'));
+    }
+    
     _saveReview() {
         var review = {
             [this.idescape]: {
                 valorations: {
                     general: this.general,
                     difficulty: this.difficulty,
-                    ambiance: this.ambiance
+                    ambience: this.ambience
                 },
                 note: this.note
             }
         };
+
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 firebase.database().ref('users/' + user.uid + '/reviews').update(review).then(() => {

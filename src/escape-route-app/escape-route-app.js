@@ -104,7 +104,7 @@ class EscapeRouteApp extends PolymerElement {
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
             <login-module name="login" on-logged="_navigateToRoute"></login-module>
             <user-route name="route" on-add-review="_navigateToReview"></user-route>
-            <user-review name="review" on-saved="_navigateToRoute" on-exit="_navigateToRoute"></user-review>
+            <user-review name="review" on-saved="_navigateToRoute" on-discarded="_navigateToRoute"></user-review>
             <escape-mates name="mates"></escape-mates>
           </iron-pages>
         </app-header-layout>
