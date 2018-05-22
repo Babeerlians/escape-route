@@ -1,7 +1,7 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-input/paper-textarea.js';
 import '../components/icon-toggle.js';
-//import '../components/search-bar.js'
+import '../components/search-escape.js'
 import '../styles/shared-styles.js';
 
 class UserReview extends PolymerElement {
@@ -74,7 +74,7 @@ class UserReview extends PolymerElement {
             </style>
             <div class="card">
                 <div class="search">
-                    <search-bar id="searchEscape" idescape="{{idescape}}" title="Escape Room"></search-bar>
+                    <search-escape id="searchEscape" idescape="{{idescape}}" title="Escape Room"></search-escape>
                 </div>
                 <div class="review">
                     <div class="notes">

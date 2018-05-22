@@ -58,10 +58,7 @@ class SearchEscape extends PolymerElement {
             searchValue: {
                 type: String,
                 value: '',
-                observer(newValue, oldValue){
-                    if(newValue !== oldValue && !this.isSelected) this._valueChanged();
-                    else this.isSelected = false;
-                }
+                observer: '_valueChanged'
             },
             isSelected: Boolean,
             title: String,
@@ -72,8 +69,8 @@ class SearchEscape extends PolymerElement {
         };
     }
 
-    _valueChanged(e) {
-        if(this.searchValue.length > 2){
+    _valueChanged(newValue, oldValue) {
+        if(this.searchValue.length > 2 && !Object.is(newValue, oldValue) && !this.isSelected){
             firebase.database().ref('games').orderByChild('name/es').startAt(this.searchValue).endAt(this.searchValue+ '\uf8ff').limitToFirst(5).on('value', snapshot => {
                 this.choices = Object.values(snapshot.val());
                 let collapse = this.$.collapse;
@@ -86,6 +83,7 @@ class SearchEscape extends PolymerElement {
             });
         }
         else{
+            this.isSelected = false;
             this.choices = [];
             let collapse = this.$.collapse;
             if(!collapse.opened) {
