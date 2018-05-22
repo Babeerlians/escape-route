@@ -27,7 +27,6 @@ class EscapeMates extends PolymerElement {
                 <h2>Personal data</h2>
                 <paper-input readonly label="name" value="{{user.displayName}}"></paper-input>
                 <paper-input readonly label="email" value="{{user.email}}"></paper-input>
-                <paper-input readonly label="uid" value="{{user.uid}}"></paper-input>
             </iron-flex-layout>
         </div>
         <div class="card">
