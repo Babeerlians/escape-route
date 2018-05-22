@@ -1,6 +1,7 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-dialog/paper-dialog.js';
+import '@polymer/paper-styles/shadow.js';
 import '../styles/shared-styles.js';
 
 class EscapeView extends PolymerElement {
@@ -9,14 +10,38 @@ class EscapeView extends PolymerElement {
             <style include="shared-styles">
                 :host {
                     display: block;
-                    padding: 10px;
                 }
                 .inputWithButton:not(.hidden) {
                     display: flex
                 }
+                .inputWithButton paper-button{
+                    margin: 0px;
+                }
                 .smallMap {
-                    width: 400px;
                     height: 300px;
+                }
+                @media (max-width: 640px) {
+                    .smallMap {
+                        height: 200px;
+                    }
+                }
+                paper-dialog {
+                    overflow-y: auto;
+                }
+                iron-collapse {
+                    padding: 8px;
+                    border: 1px solid #dedede;
+                    border-top: none;
+                    border-bottom-left-radius: 5px;
+                    border-bottom-right-radius: 5px;
+                    @apply --shadow-elevation-2dp;
+                }
+                .buttons {
+                    display: flex;
+                    justify-content: center;
+                }
+                .buttons paper-icon-button {
+                    padding: 0px;
                 }
             </style>
             <template is="dom-if" if="[[!isEmpty(itemValue)]]">
@@ -27,16 +52,16 @@ class EscapeView extends PolymerElement {
                         </template>
                 </div>
             </template>
-            <paper-dialog id="escape">
+            <iron-collapse id="escape">
                 <h1>[[itemValue.name.es]]</h1>
                 <div><h3>Description</h3><p>[[itemValue.description]]</p></div>
                 <div><h3>Duration</h3><p>[[itemValue.duration]]</p></div>
                 <div><h3>Audience age</h3><p>[[itemValue.audience_age]]</p></div>
                 <div><h3>Localization</h3><div id="map" class="smallMap"></div></div>
                 <div class="buttons">
-                    <paper-button dialog-confirm autofocus>Tap me to close</paper-button>
+                    <paper-icon-button on-click="_hideEscape" icon="expand-less" alt="Collapse" title="Collapse"></paper-icon-button>
                 </div>
-            </paper-dialog>
+            </iron-collapse>
         `;
     }
 
@@ -57,17 +82,23 @@ class EscapeView extends PolymerElement {
     }
 
     _showEscape(event) {
-        let uluru = {lat:parseFloat(this.itemValue.company.latitude), 
-            lng:parseFloat(this.itemValue.company.longitude)};
-        let map = new google.maps.Map(this.$.map, {
-          zoom: 15,
-          center: uluru
-        });
-        let marker = new google.maps.Marker({
-          position: uluru,
-          map: map
-        });
-        this.$.escape.open();
+        if(!this.$.escape.opened) {
+            let uluru = {lat:parseFloat(this.itemValue.company.latitude), 
+                lng:parseFloat(this.itemValue.company.longitude)};
+            let map = new google.maps.Map(this.$.map, {
+              zoom: 15,
+              center: uluru
+            });
+            let marker = new google.maps.Marker({
+              position: uluru,
+              map: map
+            });
+        }
+        this.$.escape.toggle();
+    }
+
+    _hideEscape(event) {
+        this.$.escape.toggle();
     }
     
     _clearInput(event) {

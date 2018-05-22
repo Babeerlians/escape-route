@@ -3,9 +3,7 @@ import {
     PolymerElement
 } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-collapse/iron-collapse.js';
-import '@polymer/paper-material/paper-material.js';
 import '@polymer/paper-input/paper-input.js';
-import '@polymer/paper-item/paper-item.js';
 import './icon-toggle.js';
 import './escape-view.js';
 import '../styles/shared-styles.js';
@@ -17,12 +15,10 @@ class SearchEscape extends PolymerElement {
             <style include="shared-styles">
                 :host {
                     display: block;
-                    padding: 10px;
                 }
                 iron-collapse {
                     box-shadow: 6px;
                 }
-
                 paper-button {
                     width: 100%;
                     text-transform: none;
@@ -34,15 +30,9 @@ class SearchEscape extends PolymerElement {
             <h2>[[title]]</h2>
             <paper-input id="inputSearch" label="[[label]]" value="{{searchValue}}"></paper-input>
             <iron-collapse id="collapse">
-                <paper-material>
-                    <div>
-                        <template id="resultList" is="dom-repeat" items="{{choices}}">
-                            <paper-item>
-                                <paper-button on-click="_selectItem">{{item.name.es}}</paper-button>
-                            </paper-item>
-                        </template>
-                    </div>
-                </paper-material>
+                <template id="resultList" is="dom-repeat" items="{{choices}}">
+                    <paper-button on-click="_selectItem">{{item.name.es}}</paper-button>
+                </template>
             </iron-collapse>
             <escape-view id="inputWithButton" clear class="hidden" on-clear="_clearEscape"></escape-view>
         `;
@@ -76,7 +66,7 @@ class SearchEscape extends PolymerElement {
                 let collapse = this.$.collapse;
                 if (this.choices.length>0) {
                     if(!collapse.opened) {
-                        this.$.collapse.toggle();
+                        collapse.toggle();
                     }
                     this.$.resultList.render();
                 }
@@ -87,14 +77,14 @@ class SearchEscape extends PolymerElement {
             this.choices = [];
             let collapse = this.$.collapse;
             if(!collapse.opened) {
-                this.$.collapse.toggle();
+                collapse.toggle();
             }
             this.$.resultList.render();
         }
     }
 
     _selectItem(event) {
-        var collapse = this.$.collapse;
+        let collapse = this.$.collapse;
         this.set('isSelected', true);
         this.set('searchValue', event.model.item.name.es);
         this.set('itemValue', event.model.item);
