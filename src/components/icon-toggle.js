@@ -1,10 +1,10 @@
-import { PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/iron-icons/iron-icons.js';
 
 class IconToggle extends PolymerElement {
   static get template() {
-    return html `
+    return html`
         <style>
           :host {
             display: block;
@@ -12,23 +12,33 @@ class IconToggle extends PolymerElement {
             --icon-toggle-outline-color: black;
             --icon-toggle-pressed-color: red;
           }
-          div > iron-icon {
-            fill: var(--icon-toggle-color, rgba(0,0,0,0));
+        
+          div>iron-icon {
+            fill: var(--icon-toggle-color, rgba(0, 0, 0, 0));
             stroke: var(--icon-toggle-outline-color, currentcolor);
           }
-          div > iron-icon.pressed{
+        
+          div>iron-icon.pressed {
             fill: var(--icon-toggle-pressed-color, currentcolor);
-          }         
+          }
+        
           div {
             cursor: pointer;
           }
-          div:hover > iron-icon{
+        
+          div.readOnly {
+            cursor: not-allowed;
+          }
+        
+          div:not(.readOnly):hover>iron-icon {
             fill: var(--icon-toggle-pressed-color, currentcolor);
           }
-          div:hover > iron-icon:hover {
+        
+          div:not(.readOnly):hover>iron-icon:hover {
             fill: var(--icon-toggle-pressed-color, currentcolor);
           }
-          div:hover > iron-icon:hover ~ iron-icon {
+        
+          div:not(.readOnly):hover>iron-icon:hover~iron-icon {
             fill: var(--icon-toggle-color, currentcolor);
           }
         </style>
@@ -77,6 +87,9 @@ class IconToggle extends PolymerElement {
         icon: this.icon,
         value: i
       });
+    }
+    if (this.attributes.readonly) {
+      this.$.iconsbar.classList.add("readOnly");
     }
     this._renderList();
   }

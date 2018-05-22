@@ -114,10 +114,12 @@ class UserReview extends PolymerElement {
                 value: 0
             },
             note: {
-                type: String
+                type: String,
+                value: ''
             },
             idescape: {
-                type: String
+                type: String,
+                value: ''
             }
         }
     }
