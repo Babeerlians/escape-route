@@ -1,4 +1,7 @@
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import {
+    html,
+    PolymerElement
+} from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-input/paper-textarea.js';
 import '../components/icon-toggle.js';
 import '../components/search-escape.js'
@@ -139,19 +142,20 @@ class UserReview extends PolymerElement {
     }
 
     _saveReview() {
-        var review = new Object(),
-            id;
-        id = this.idescape;
-        review[id] = new Object();
-        review[id].valorations = new Object();
-        review[id].valorations.general = this.general;
-        review[id].valorations.difficulty = this.difficulty;
-        review[id].valorations.ambience = this.ambiance;
-        review[id].note = this.note;
+        var review = {
+            [this.idescape]: {
+                valorations: {
+                    general: this.general,
+                    difficulty: this.difficulty,
+                    ambiance: this.ambiance
+                },
+                note: this.note
+            }
+        };
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 firebase.database().ref('users/' + user.uid + '/reviews').update(review).then(() => {
-                    this.dispatchEvent(new CustomEvent('saved'));
+                        this.dispatchEvent(new CustomEvent('saved'));
                     })
                     .catch((error) => {
                         console.log('Synchronization failed');

@@ -1,5 +1,5 @@
 import {
-    html, 
+    html,
     PolymerElement
 } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-collapse/iron-collapse.js';
@@ -13,7 +13,7 @@ import '../styles/shared-styles.js';
 class SearchEscape extends PolymerElement {
 
     static get template() {
-        return html`
+        return html `
             <style include="shared-styles">
                 :host {
                     display: block;
@@ -48,9 +48,11 @@ class SearchEscape extends PolymerElement {
         `;
     }
 
-    static get is() { return 'search-escape'; }
+    static get is() {
+        return 'search-escape';
+    }
 
-    static get properties() { 
+    static get properties() {
         return {
             choices: [],
             label: String,
@@ -70,23 +72,22 @@ class SearchEscape extends PolymerElement {
     }
 
     _valueChanged(newValue, oldValue) {
-        if(this.searchValue.length > 2 && !Object.is(newValue, oldValue) && !this.isSelected){
-            firebase.database().ref('games').orderByChild('name/es').startAt(this.searchValue).endAt(this.searchValue+ '\uf8ff').limitToFirst(5).on('value', snapshot => {
+        if (this.searchValue.length > 2 && !Object.is(newValue, oldValue) && !this.isSelected) {
+            firebase.database().ref('games').orderByChild('name/es').startAt(this.searchValue).endAt(this.searchValue + '\uf8ff').limitToFirst(5).on('value', snapshot => {
                 this.choices = Object.values(snapshot.val());
                 let collapse = this.$.collapse;
-                if (this.choices.length>0) {
-                    if(!collapse.opened) {
+                if (this.choices.length > 0) {
+                    if (!collapse.opened) {
                         this.$.collapse.toggle();
                     }
                     this.$.resultList.render();
                 }
             });
-        }
-        else{
+        } else {
             this.isSelected = false;
             this.choices = [];
             let collapse = this.$.collapse;
-            if(!collapse.opened) {
+            if (!collapse.opened) {
                 this.$.collapse.toggle();
             }
             this.$.resultList.render();
@@ -115,4 +116,4 @@ class SearchEscape extends PolymerElement {
 
 }
 
-window.customElements.define(SearchEscape.is , SearchEscape);
+window.customElements.define(SearchEscape.is, SearchEscape);

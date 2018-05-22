@@ -86,7 +86,6 @@ class EscapeRouteApp extends PolymerElement {
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
             <a name="login" href="[[rootPath]]login">Login</a>
             <a name="route" href="[[rootPath]]route">Route</a>
-            <a name="review" href="[[rootPath]]review">Review</a>
             <a name="mates" href="[[rootPath]]mates">Mates</a>
           </iron-selector>
         </app-drawer>
@@ -104,8 +103,8 @@ class EscapeRouteApp extends PolymerElement {
       
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
             <login-module name="login" on-logged="_navigateToRoute"></login-module>
-            <user-route name="route"></user-route>
-            <user-review name="review" on-saved="_navigateToRoute"></user-review>
+            <user-route name="route" on-add-review="_navigateToReview"></user-route>
+            <user-review name="review" on-saved="_navigateToRoute" on-exit="_navigateToRoute"></user-review>
             <escape-mates name="mates"></escape-mates>
           </iron-pages>
         </app-header-layout>
@@ -178,8 +177,16 @@ class EscapeRouteApp extends PolymerElement {
     }
   }
 
-  _navigateToRoute(e) {
-    this.set('route.path', 'route');
+  _navigateToPath(path) {
+    this.set('route.path', path);
+  }
+
+  _navigateToRoute() {
+    this._navigateToPath('route');
+  }
+
+  _navigateToReview() {
+    this._navigateToPath('review');
   }
 
   _pageChanged(page) {

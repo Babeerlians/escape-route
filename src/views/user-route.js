@@ -1,12 +1,16 @@
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import {
+    html,
+    PolymerElement
+} from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/iron-image/iron-image.js';
+import '@polymer/paper-button/paper-button.js';
 import '../components/icon-toggle.js';
 import '../styles/shared-styles.js';
 
 class UserRoute extends PolymerElement {
     static get template() {
-        return html`
+        return html `
             <style include="shared-styles">
                 .valorations {
                     margin-left: 10%;
@@ -17,6 +21,9 @@ class UserRoute extends PolymerElement {
                     <iron-image class="circle" alt="user profile picture" src="[[user.photoURL]]" sizing="cover"></iron-image>
                     <paper-input readonly label="name" value="[[user.displayName]]"></paper-input>
                 </iron-flex-layout>
+                <paper-button raised noink class="red" on-click="_addReview">
+                    <iron-icon icon="add-circle-outline"></iron-icon>&nbsp;Add review
+                </paper-button>
                 <ul>
                     <template id="reviews" is="dom-repeat" items="[[reviews]]" as="review">
                         <li>
@@ -47,6 +54,10 @@ class UserRoute extends PolymerElement {
     ready() {
         super.ready();
         this._getReviews();
+    }
+
+    _addReview() {
+        this.dispatchEvent(new CustomEvent('add-review'));
     }
 
     _getReviews() {
