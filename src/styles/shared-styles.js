@@ -44,6 +44,9 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         color: #212121;
         font-size: 22px;
       }
+      paper-input, paper-textarea {
+        padding: 0 4px;
+      }
     </style>
   </template>
 </dom-module>`;

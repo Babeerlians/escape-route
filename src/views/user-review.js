@@ -69,7 +69,6 @@ class UserReview extends PolymerElement {
                 .submit {
                     background-color: red;
                     color: white;
-                    font-weight: bold;
                     margin-top: 20px;
                 }
                 .submit[disabled] {
