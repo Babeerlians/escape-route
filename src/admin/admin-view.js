@@ -9,8 +9,8 @@ class AdminView extends PolymerElement {
   static get template() {
     return html `
       <style include="shared-styles">
-        .valorations {
-          margin-left: 10%;
+        :host {
+          display: block;
         }
       </style>
       <div class="card">
@@ -19,8 +19,31 @@ class AdminView extends PolymerElement {
     `;
   }
 
-  _updateGames(){
-    console.log('Updating...');
+  _updateGames(event) {
+    event.target
+    const baseUrl = 'https://www.escaperoomlover.com/api/es/public/game?page=';
+    const firstPage = baseUrl + '1';
+    let games = [];
+    fetch(firstPage)
+      .then(response => response.json())
+      .then(myJson => {
+        const lastPage = myJson.lastPage;
+        let urls = Array.from(Array(lastPage).keys(), item => baseUrl + (item + 1));
+        Promise.all(urls.map(url => fetch(url)))
+          .then(responses =>
+            Promise.all(responses.map(response => response.json()))
+          ).then(rawGames => {
+            rawGames.map(rawGame => {
+              games = games.concat(rawGame.games);
+            });
+            firebase.database().ref('games').set(games).then(() => {
+                alert('Games updated');
+              })
+              .catch((error) => {
+                console.log('Synchronization failed');
+              });
+          });
+      });
   }
 
 }
