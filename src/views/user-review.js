@@ -67,8 +67,6 @@ class UserReview extends PolymerElement {
                     justify-content: space-evenly;
                 }
                 .submit {
-                    background-color: red;
-                    color: white;
                     margin-top: 20px;
                 }
                 .submit[disabled] {
@@ -93,7 +91,7 @@ class UserReview extends PolymerElement {
                 </div>
                 <div class="buttons">
                     <paper-button raised class="submit" on-click="_discardReview">Discard</paper-button>
-                    <paper-button id="btnSave" raised class="submit" disabled="true" on-click="_saveReview">Save</paper-button>
+                    <paper-button id="btnSave" raised class="submit red" disabled="true" on-click="_saveReview">Save</paper-button>
                 </div>
             </div>
         `;

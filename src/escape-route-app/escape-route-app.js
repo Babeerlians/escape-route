@@ -100,13 +100,14 @@ class EscapeRouteApp extends PolymerElement {
             <app-toolbar>
               <paper-icon-button icon="escape-icons:menu" drawer-toggle=""></paper-icon-button>
               <div main-title="">Escape route</div>
-              <paper-icon-button icon="exit-to-app" title="Log out" on-click="logout" class="red"></paper-icon-button>
+              <paper-icon-button icon="power-settings-new" title="Log out" on-click="logout"></paper-icon-button>
             </app-toolbar>
           </app-header>
       
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
             <login-module name="login" on-logged="_navigateToRoute"></login-module>
             <user-route name="route" on-add-review="_navigateToReview"></user-route>
+            <admin-view name="admin" on-updated="_navigateToRoute"></admin-view>
             <user-review name="review" on-saved="_navigateToRoute" on-discarded="_navigateToRoute"></user-review>
             <escape-mates name="mates"></escape-mates>
           </iron-pages>
@@ -160,7 +161,7 @@ class EscapeRouteApp extends PolymerElement {
     if (!this.appInitialized) {
       this._initializeFirebaseApp();
     }
-    if (['login'].indexOf(page) !== -1) {
+    if (['login'].indexOf(page) !== -1 || Object.is(page, '')) {
       this.page = 'login';
       this.set('route.path', 'login');
     } else {
@@ -194,17 +195,20 @@ class EscapeRouteApp extends PolymerElement {
 
   _pageChanged(page) {
     switch (page) {
+      case 'admin':
+        import ('../admin/admin-view.js');
+        break;
       case 'login':
         import ('../login/login-module.js');
+        break;
+      case 'mates':
+        import ('../mates/escape-mates.js');
         break;
       case 'review':
         import ('../views/user-review.js');
         break;
       case 'route':
         import ('../views/user-route.js');
-        break;
-      case 'mates':
-        import ('../mates/escape-mates.js');
         break;
     }
   }

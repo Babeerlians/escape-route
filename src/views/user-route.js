@@ -68,11 +68,11 @@ class UserRoute extends PolymerElement {
                     this.reviews = [];
                     let reviews = snapshot.val();
                     for (let key in reviews) {
-                        reviews[key].key = key;
+                        reviews[key].uid = key;
                     }
                     reviews = reviews ? Object.values(reviews) : [];
                     reviews.map(review => {
-                        firebase.database().ref('games').orderByChild('id').equalTo(review.key).on('value', snapshot => {
+                        firebase.database().ref('games').orderByChild('id').equalTo(review.uid).on('value', snapshot => {
                             review.game = Object.values(snapshot.val())[0];
                             this.reviews.push(review);
                             this.$.reviews.render();
