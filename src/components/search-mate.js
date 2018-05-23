@@ -4,10 +4,9 @@ import {
 } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-collapse/iron-collapse.js';
 import '@polymer/paper-input/paper-input.js';
-import './escape-view.js';
 import '../styles/shared-styles.js';
 
-class SearchEscape extends PolymerElement {
+class SearchMate extends PolymerElement {
 
     static get template() {
         return html `
@@ -25,27 +24,33 @@ class SearchEscape extends PolymerElement {
                 paper-input {
                     background-color: whitesmoke;
                 }
+                paper-icon-item {
+                    display: block;
+                }
             </style>
             <h2>[[title]]</h2>
             <paper-input id="inputSearch" label="[[label]]" value="{{searchValue}}"></paper-input>
             <iron-collapse id="collapse">
-                <template id="resultList" is="dom-repeat" items="{{choices}}">
-                    <paper-button on-click="_selectItem">{{item.name.es}}</paper-button>
+                <template id="resultList" is="dom-repeat" items="[[data]]">
+                    <paper-button on-click="_selectItem">{{item.displayName}}</paper-button>
                 </template>
             </iron-collapse>
-            <escape-view id="inputWithButton" clear class="hidden" on-clear="_clearEscape"></escape-view>
+            <template id="mateList" is="dom-repeat" items="[[mates]]">
+                    <paper-icon-item>{{item.displayName}}
+                        <paper-icon-button on-click="_deleteMate" icon="delete" alt="Delete" title="clear"></paper-icon-button>
+                    </paper-icon-item>
+            </template>
         `;
     }
 
     static get is() {
-        return 'search-escape';
+        return 'search-mate';
     }
 
     static get properties() {
         return {
-            choices: [],
+            data: [],
             label: String,
-            itemValue: Object,
             searchValue: {
                 type: String,
                 value: '',
@@ -53,8 +58,13 @@ class SearchEscape extends PolymerElement {
             },
             isSelected: Boolean,
             title: String,
-            idescape: {
-                type: String,
+            mates: {
+                type: Array,
+                value: []
+            },
+            uids: {
+                type: Array,
+                value: [],
                 notify: true
             }
         };
@@ -62,47 +72,47 @@ class SearchEscape extends PolymerElement {
 
     _valueChanged(newValue, oldValue) {
         if (this.searchValue.length > 2 && !Object.is(newValue, oldValue) && !this.isSelected) {
-            firebase.database().ref('games').orderByChild('name/es').startAt(this.searchValue).endAt(this.searchValue + '\uf8ff').limitToFirst(5).on('value', snapshot => {
-                this.choices = Object.values(snapshot.val());
+            firebase.database().ref('users').orderByChild('displayName').startAt(this.searchValue).endAt(this.searchValue + '\uf8ff').limitToFirst(5).on('value', snapshot => {
+                let data = snapshot.val();
+                for(let key in data) {
+                    data[key].uid = key;
+                }
+                this.data = data ? Object.values(data) : [];
+                this.data = this.data.filter(item => !this.mates.find(
+                    mate => item.uid===mate.uid
+                ));
                 let collapse = this.$.collapse;
-                if (this.choices.length > 0) {
+                if (this.data.length > 0) {
                     if (!collapse.opened) {
                         collapse.toggle();
                     }
-                    this.$.resultList.render();
                 }
             });
         } else {
             this.isSelected = false;
-            this.choices = [];
+            this.data = [];
             let collapse = this.$.collapse;
             if (!collapse.opened) {
                 collapse.toggle();
             }
-            this.$.resultList.render();
         }
     }
 
     _selectItem(event) {
         let collapse = this.$.collapse;
         this.set('isSelected', true);
-        this.set('searchValue', event.model.item.name.es);
-        this.set('itemValue', event.model.item);
-        this.set('idescape', event.model.item.id);
+        this.set('searchValue', '');
+        this.mates.push(event.model.item);
+        this.mates = this.mates.slice(0);
+        this.uids = Array.from(this.mates, mate => mate.uid);
         collapse.toggle();
-        this.$.inputWithButton.itemValue = event.model.item;
-        this.$.inputWithButton.classList.remove("hidden");
-        this.$.inputSearch.toggleClass("hidden");
     }
 
-    _clearEscape(event) {
-        this.set('searchValue', '');
-        this.set('itemValue', {});
-        this.set('idescape', '');
-        this.$.inputWithButton.classList.add("hidden");
-        this.$.inputSearch.toggleClass("hidden");
+    _deleteMate(event) {
+        this.mates = this.mates.filter(mate => mate.uid !== event.model.item.uid);
+        this.uids = Array.from(this.mates, mate => mate.uid);
     }
 
 }
 
-window.customElements.define(SearchEscape.is, SearchEscape);
+window.customElements.define(SearchMate.is, SearchMate);

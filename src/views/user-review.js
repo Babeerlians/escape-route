@@ -5,7 +5,8 @@ import {
 import '@polymer/paper-input/paper-textarea.js';
 import '@polymer/paper-button/paper-button.js';
 import '../components/icon-toggle.js';
-import '../components/search-escape.js'
+import '../components/search-escape.js';
+import '../components/search-mate';
 import '../styles/shared-styles.js';
 
 class UserReview extends PolymerElement {
@@ -89,6 +90,9 @@ class UserReview extends PolymerElement {
                         <icon-toggle id="ambience" total=5 icon="home" value={{ambience}} title="Ambience"></icon-toggle>
                     </div>
                 </div>
+                <div class="mates">
+                    <search-mate id="searchMate" uids="{{uids}}" title="Mate"></search-mate>
+                </div>
                 <div class="buttons">
                     <paper-button raised class="submit" on-click="_discardReview">Discard</paper-button>
                     <paper-button id="btnSave" raised class="submit red" disabled="true" on-click="_saveReview">Save</paper-button>
@@ -122,6 +126,10 @@ class UserReview extends PolymerElement {
             idescape: {
                 type: String,
                 value: ''
+            },
+            uids: {
+                type: Array,
+                value: []
             }
         }
     }
@@ -152,7 +160,8 @@ class UserReview extends PolymerElement {
                     difficulty: this.difficulty,
                     ambience: this.ambience
                 },
-                note: this.note
+                note: this.note,
+                mates: this.uids
             }
         };
 
