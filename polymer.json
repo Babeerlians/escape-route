@@ -3,6 +3,7 @@
   "shell": "src/escape-route-app/escape-route-app.js",
   "sources": [
     "src/**.js",
+    "src/lib/**.js",
     "manifest/**",
     "package.json"
   ],
