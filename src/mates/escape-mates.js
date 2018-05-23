@@ -4,7 +4,7 @@ import '@polymer/paper-input/paper-input.js';
 import '@polymer/iron-image/iron-image.js';
 import '@polymer/iron-list/iron-list.js';
 import '../styles/shared-styles.js';
-// define the element's class element
+
 class EscapeMates extends PolymerElement {
     static get template() {
         return html`

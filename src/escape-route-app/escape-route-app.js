@@ -1,5 +1,11 @@
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { setPassiveTouchGestures, setRootPath } from '@polymer/polymer/lib/utils/settings.js';
+import {
+  PolymerElement,
+  html
+} from '@polymer/polymer/polymer-element.js';
+import {
+  setPassiveTouchGestures,
+  setRootPath
+} from '@polymer/polymer/lib/utils/settings.js';
 import '@polymer/app-layout/app-drawer/app-drawer.js';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
 import '@polymer/app-layout/app-header/app-header.js';
@@ -8,10 +14,10 @@ import '@polymer/app-layout/app-scroll-effects/app-scroll-effects.js';
 import '@polymer/app-layout/app-toolbar/app-toolbar.js';
 import '@polymer/app-route/app-location.js';
 import '@polymer/app-route/app-route.js';
+import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
-import '@polymer/paper-button/paper-button.js';
 import '../styles/escape-icons.js';
 
 setPassiveTouchGestures(true);
@@ -22,7 +28,7 @@ setRootPath('/');
 
 class EscapeRouteApp extends PolymerElement {
   static get template() {
-    return html`
+    return html `
       <style>
         :host {
           --app-primary-color: #555;
@@ -66,10 +72,8 @@ class EscapeRouteApp extends PolymerElement {
           font-weight: bold;
         }
       
-        paper-button.red {
-          background-color: red;
+        paper-icon-button.red {
           color: white;
-          float: right;
         }
       </style>
       
@@ -84,7 +88,6 @@ class EscapeRouteApp extends PolymerElement {
         <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
           <app-toolbar>Menu</app-toolbar>
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-            <a name="login" href="[[rootPath]]login">Login</a>
             <a name="route" href="[[rootPath]]route">Route</a>
             <a name="mates" href="[[rootPath]]mates">Mates</a>
           </iron-selector>
@@ -97,7 +100,7 @@ class EscapeRouteApp extends PolymerElement {
             <app-toolbar>
               <paper-icon-button icon="escape-icons:menu" drawer-toggle=""></paper-icon-button>
               <div main-title="">Escape route</div>
-              <paper-button raised noink class="red" on-click="logout">Log out</paper-button>
+              <paper-icon-button icon="exit-to-app" title="Log out" on-click="logout" class="red"></paper-icon-button>
             </app-toolbar>
           </app-header>
       
@@ -157,7 +160,10 @@ class EscapeRouteApp extends PolymerElement {
     if (!this.appInitialized) {
       this._initializeFirebaseApp();
     }
-    if (['review', 'route', 'mates'].indexOf(page) !== -1) {
+    if (['login'].indexOf(page) !== -1) {
+      this.page = 'login';
+      this.set('route.path', 'login');
+    } else {
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
           this.page = page;
@@ -166,9 +172,6 @@ class EscapeRouteApp extends PolymerElement {
           this.set('route.path', 'login');
         }
       });
-    } else {
-      this.page = 'login';
-      this.set('route.path', 'login');
     }
 
     // Close a non-persistent drawer when the page & route are changed.
@@ -192,16 +195,16 @@ class EscapeRouteApp extends PolymerElement {
   _pageChanged(page) {
     switch (page) {
       case 'login':
-        import('../login/login-module.js');
+        import ('../login/login-module.js');
         break;
       case 'review':
-        import('../views/user-review.js');
+        import ('../views/user-review.js');
         break;
       case 'route':
-        import('../views/user-route.js');
+        import ('../views/user-route.js');
         break;
       case 'mates':
-        import('../mates/escape-mates.js');
+        import ('../mates/escape-mates.js');
         break;
     }
   }
