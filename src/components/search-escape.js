@@ -23,7 +23,7 @@ class SearchEscape extends PolymerElement {
                     text-transform: none;
                 }
                 paper-input {
-                    background-color: whitesmoke;
+                    background-color: var(--app-secondary-color);
                 }
             </style>
             <h2>[[title]]</h2>

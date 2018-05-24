@@ -22,7 +22,7 @@ class SearchMate extends PolymerElement {
                     text-transform: none;
                 }
                 paper-input {
-                    background-color: whitesmoke;
+                    background-color: var(--app-secondary-color);
                 }
                 paper-icon-item {
                     display: block;

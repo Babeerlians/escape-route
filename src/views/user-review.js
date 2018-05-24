@@ -56,7 +56,7 @@ class UserReview extends PolymerElement {
                     }
                 }
                 paper-textarea {
-                    background-color: whitesmoke
+                    background-color: var(--app-secondary-color)
                 }
                 @media (max-width: 640px){
                     .review {

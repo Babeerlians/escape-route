@@ -32,7 +32,8 @@ class EscapeRouteApp extends PolymerElement {
       <style>
         :host {
           --app-primary-color: #e24e4e;
-          --app-secondary-color: black;
+          --app-primary-light-color: #ed9191;
+          --app-secondary-color: #f5f5f5;
           --app-tertiary-color: #555;
           --app-drawer-width: 150px;
           display: block;
@@ -65,7 +66,7 @@ class EscapeRouteApp extends PolymerElement {
           display: block;
           padding: 0 16px;
           text-decoration: none;
-          color: var(--app-secondary-color);
+          color: black;
           line-height: 40px;
         }
       
