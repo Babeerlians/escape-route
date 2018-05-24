@@ -4,9 +4,11 @@ import {
 } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-input/paper-textarea.js';
 import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-toggle-button/paper-toggle-button.js';
 import '../components/icon-toggle.js';
 import '../components/search-escape.js';
-import '../components/search-mate';
+import '../components/search-mate.js';
+import '../components/time-picker.js';
 import '../styles/shared-styles.js';
 
 class UserReview extends PolymerElement {
@@ -73,6 +75,12 @@ class UserReview extends PolymerElement {
                 .submit[disabled] {
                     opacity: 0.5;
                 }
+                paper-toggle-button{
+                    --paper-toggle-button-checked-bar-color:  var(--app-primary-color);
+                    --paper-toggle-button-checked-button-color:  var(--app-primary-color);
+                    --paper-toggle-button-unchecked-bar-color:  var(--app-tertiary-color);
+                    --paper-toggle-button-unchecked-button-color:  var(--app-secondary-color);
+                }
             </style>
             <div class="card">
                 <div class="search">
@@ -92,6 +100,11 @@ class UserReview extends PolymerElement {
                 </div>
                 <div class="mates">
                     <search-mate id="searchMate" uids="{{uids}}" title="Mate"></search-mate>
+                </div>
+                <div>
+                    <h2>Fecha</h2>
+                    <paper-toggle-button on-change="toggleDuration">Completed</paper-toggle-button>
+                    <time-picker id="duration" class="hidden"></time-picker>                    
                 </div>
                 <div class="buttons">
                     <paper-button raised class="submit" on-click="_discardReview">Discard</paper-button>
@@ -146,6 +159,10 @@ class UserReview extends PolymerElement {
         } else {
             this.$.btnSave.setAttribute('disabled', true)
         }
+    }
+
+    toggleDuration(event) {
+        this.$.duration.toggle();
     }
 
     _discardReview() {

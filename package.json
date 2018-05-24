@@ -22,6 +22,7 @@
     "@polymer/paper-item": "^3.0.0-pre.19",
     "@polymer/paper-material": "^3.0.0-pre.19",
     "@polymer/paper-styles": "^3.0.0-pre.19",
+    "@polymer/paper-toggle-button": "^3.0.0-pre.19",
     "@polymer/polymer": "^3.0.2"
   },
   "devDependencies": {
