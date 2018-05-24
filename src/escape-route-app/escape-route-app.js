@@ -29,10 +29,9 @@ setRootPath('/');
 class EscapeRouteApp extends PolymerElement {
   static get template() {
     return html `
-      <style>
+     <style> 
         :host {
           --app-primary-color: #e24e4e;
-          --app-primary-light-color: #ed9191;
           --app-secondary-color: #f5f5f5;
           --app-tertiary-color: #555;
           --app-drawer-width: 150px;

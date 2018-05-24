@@ -35,6 +35,10 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         line-height: 64px;
       }
 
+      .flex {
+        display: flex;
+      }
+
       .hidden {
         display: none;
       }

@@ -8,7 +8,7 @@ class IconToggle extends PolymerElement {
         <style>
           :host {
             display: block;
-            --icon-toggle-outline-color: black;
+            --icon-toggle-outline-color: var(--app-tertiary-color);
             --icon-toggle-color: var(--app-secondary-color);
             --icon-toggle-pressed-color: var(--app-primary-color);
           }
