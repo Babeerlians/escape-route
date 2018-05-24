@@ -10,7 +10,7 @@ class IconToggle extends PolymerElement {
             display: block;
             --icon-toggle-color: lightgrey;
             --icon-toggle-outline-color: black;
-            --icon-toggle-pressed-color: red;
+            --icon-toggle-pressed-color: var(--app-primary-color);
           }
         
           div>iron-icon {

@@ -31,8 +31,9 @@ class EscapeRouteApp extends PolymerElement {
     return html `
       <style>
         :host {
-          --app-primary-color: #555;
+          --app-primary-color: #e24e4e;
           --app-secondary-color: black;
+          --app-tertiary-color: #555;
           --app-drawer-width: 150px;
           display: block;
         }
@@ -49,7 +50,7 @@ class EscapeRouteApp extends PolymerElement {
 
         app-header {
           color: #fff;
-          background-color: var(--app-primary-color);
+          background-color: var(--app-tertiary-color);
         }
       
         app-header paper-icon-button {
@@ -72,8 +73,8 @@ class EscapeRouteApp extends PolymerElement {
           font-weight: bold;
         }
       
-        paper-icon-button.red {
-          color: white;
+        paper-icon-button:hover {
+          color: var(--app-primary-color);
         }
       </style>
       
@@ -89,6 +90,7 @@ class EscapeRouteApp extends PolymerElement {
           <app-toolbar>Menu</app-toolbar>
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
             <a name="route" href="[[rootPath]]route">Route</a>
+            <a name="games" href="[[rootPath]]games">Games</a>
             <a name="mates" href="[[rootPath]]mates">Mates</a>
           </iron-selector>
         </app-drawer>
@@ -107,9 +109,10 @@ class EscapeRouteApp extends PolymerElement {
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
             <login-module name="login" on-logged="_navigateToRoute"></login-module>
             <user-route name="route" on-add-review="_navigateToReview"></user-route>
-            <admin-view name="admin" on-updated="_navigateToRoute"></admin-view>
+            <escape-games name="games"></escape-games>
             <user-review name="review" on-saved="_navigateToRoute" on-discarded="_navigateToRoute"></user-review>
             <escape-mates name="mates"></escape-mates>
+            <admin-view name="admin"></admin-view>
           </iron-pages>
         </app-header-layout>
       </app-drawer-layout>
@@ -198,6 +201,9 @@ class EscapeRouteApp extends PolymerElement {
       case 'admin':
         import ('../admin/admin-view.js');
         break;
+      case 'games':
+        import ('../games/escape-games.js');
+        break;
       case 'login':
         import ('../login/login-module.js');
         break;
@@ -215,11 +221,8 @@ class EscapeRouteApp extends PolymerElement {
 
   logout() {
     firebase.auth().signOut().then(() => {
-      console.log("chao");
       this.user = undefined;
       this.mates = [];
-    }, function (error) {
-      console.log("sigues logueado");
     });
   }
 
