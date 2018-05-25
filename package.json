@@ -24,7 +24,8 @@
     "@polymer/paper-spinner": "^3.0.0-pre.19",
     "@polymer/paper-styles": "^3.0.0-pre.19",
     "@polymer/paper-toggle-button": "^3.0.0-pre.19",
-    "@polymer/polymer": "^3.0.2"
+    "@polymer/polymer": "^3.0.2",
+    "@vaadin/vaadin-date-picker": "^3.0.0-pre.3"
   },
   "devDependencies": {
     "@webcomponents/webcomponentsjs": "^2.0.0",

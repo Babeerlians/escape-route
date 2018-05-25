@@ -28,7 +28,7 @@ class IntegerInput extends PolymerElement {
                     font-weight: bold;
                 }
                 h5 {
-                    margin-bottom: 0px;
+                    margin: 0px;
                 }
                 paper-icon-button {
                     color: var(--app-primary-color);
@@ -37,7 +37,7 @@ class IntegerInput extends PolymerElement {
             </style>
             <h5>[[title]]</h5>
             <paper-icon-button icon="expand-less" on-mousedown="_addTime" on-click="_add" on-mouseup="_cancelTime" on-mouseleave="_cancelTime"></paper-icon-button>
-            <input id="number" class="no-spin" type="number" value={{value}} min=[[min]] max=[[max]] placeholder="00" on-keypress="validate"/>
+            <input id="number" class="no-spin" type="number" value=[[value]] min=[[min]] max=[[max]] placeholder="00" on-keypress="validate"/>
             <paper-icon-button icon="expand-more" on-mousedown="_substractTime" on-click="_substract" on-mouseup="_cancelTime" on-mouseleave="_cancelTime"></paper-icon-button>
         `;
     }
@@ -55,7 +55,10 @@ class IntegerInput extends PolymerElement {
             },
             value: {
                 type: Number,
-                value: 0
+                value: 0,
+                notify: true,
+                reflectToAtribute: true,
+                observer: '_changeValue'
             },
             max: {
                 type: Number,
@@ -72,15 +75,12 @@ class IntegerInput extends PolymerElement {
         let n = String.fromCharCode(event.keyCode);
         let total = event.target.value;
         if (Number.isInteger(parseInt(n, 10))) {
-            if (parseInt(event.target.value + n) > event.target.max) {
-                event.preventDefault();
-                return false;
+            if (parseInt(event.target.value + n) <= event.target.max) {
+                this.value = parseInt(event.target.value + n);
             }
         }
-        else {
-            event.preventDefault();
-            return false;
-        }
+        event.preventDefault();
+        return false;
     }
 
     _add() {
@@ -107,6 +107,10 @@ class IntegerInput extends PolymerElement {
 
     _cancelTime(event) {
         clearInterval(this.currentInterval);
+    }
+
+    _changeValue(oldValue, newValue) {
+        this.dispatchEvent(new CustomEvent('change'));
     }
 }
 

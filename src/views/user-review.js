@@ -5,6 +5,7 @@ import {
 import '@polymer/paper-input/paper-textarea.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-toggle-button/paper-toggle-button.js';
+import '@vaadin/vaadin-date-picker/vaadin-date-picker-light.js';
 import '../components/icon-toggle.js';
 import '../components/search-escape.js';
 import '../components/search-mate.js';
@@ -19,7 +20,12 @@ class UserReview extends PolymerElement {
                     display: flex;
                 }
                 .review {
-                        display: flex;
+                    display: flex;
+                }
+                .date {
+                    display: flex;
+                    justify-content: space-around;
+                    align-items: center;
                 }
                 @media (min-width: 1001px) {
                     .review {
@@ -75,12 +81,14 @@ class UserReview extends PolymerElement {
                 .submit[disabled] {
                     opacity: 0.5;
                 }
-                paper-toggle-button{
+                paper-toggle-button {
                     --paper-toggle-button-checked-bar-color:  var(--app-primary-color);
                     --paper-toggle-button-checked-button-color:  var(--app-primary-color);
                     --paper-toggle-button-unchecked-bar-color:  var(--app-tertiary-color);
                     --paper-toggle-button-unchecked-button-color:  var(--app-secondary-color);
                 }
+
+                
             </style>
             <div class="card">
                 <div class="search">
@@ -103,8 +111,17 @@ class UserReview extends PolymerElement {
                 </div>
                 <div>
                     <h2>Fecha</h2>
-                    <paper-toggle-button on-change="toggleDuration">Completed</paper-toggle-button>
-                    <time-picker id="duration" class="hidden"></time-picker>                    
+                    <div class="date">
+                        <vaadin-date-picker-light id="vdate" value="{{date}}">
+                                Fecha:
+                                <iron-icon icon="event"></iron-icon>
+                                <iron-input>
+                                    <input size="10" disabled>
+                                </iron-input>
+                        </vaadin-date-picker-light>
+                        <paper-toggle-button on-change="toggleDuration" checked="{{completed}}">Completed</paper-toggle-button>
+                        <time-picker id="duration" minutes="{{minutes}}" seconds="{{seconds}}" class="not-visible"></time-picker>
+                    </div>                 
                 </div>
                 <div class="buttons">
                     <paper-button raised class="submit" on-click="_discardReview">Discard</paper-button>
@@ -143,21 +160,42 @@ class UserReview extends PolymerElement {
             uids: {
                 type: Array,
                 value: []
+            },
+            completed: {
+                type: Boolean,
+                value: false
+            },
+            date: {
+                type: String,
+                value: ''
+            },
+            minutes: {
+                type: Number,
+                value: 0
+            },
+            seconds: {
+                type: Number,
+                value: 0
             }
         }
     }
 
     static get observers() {
         return [
-            'validate(general, difficulty, ambience, note, idescape)'
+            'validate(general, difficulty, ambience, note, idescape, completed, date, minutes, seconds)'
         ]
     }
 
-    validate(general, difficulty, ambience, note, idescape) {
-        if (general > 0 && difficulty > 0 && ambience > 0 && note.length > 0 && idescape.length > 0) {
-            this.$.btnSave.removeAttribute('disabled');
+    validate(general, difficulty, ambience, note, idescape, completed, date, minutes, seconds) {
+        if (general > 0 && difficulty > 0 && ambience > 0 && note.length > 0 && idescape.length > 0 && date.length > 0) {
+            if(completed === false || (completed === true && (minutes > 0 || seconds > 0))){
+                this.$.btnSave.removeAttribute('disabled');
+            }
+            else{
+                this.$.btnSave.setAttribute('disabled', true);
+            }
         } else {
-            this.$.btnSave.setAttribute('disabled', true)
+            this.$.btnSave.setAttribute('disabled', true);
         }
     }
 
@@ -178,7 +216,13 @@ class UserReview extends PolymerElement {
                     ambience: this.ambience
                 },
                 note: this.note,
-                mates: this.uids
+                mates: this.uids,
+                date: this.date,
+                completed: this.completed,
+                duration: {
+                    minutes: this.minutes,
+                    seconds: this.seconds
+                }
             }
         };
 

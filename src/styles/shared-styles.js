@@ -43,6 +43,16 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         display: none;
       }
 
+      .not-visible {
+        opacity: 0;
+        transition: all .5s;
+      }
+
+      .visible {
+        opacity: 1;
+        transition: all .5s;
+      }
+
       h1 {
         margin: 16px 0;
         color: #212121;
