@@ -5,6 +5,7 @@ import {
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/iron-image/iron-image.js';
 import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-spinner/paper-spinner.js';
 import '../components/icon-toggle.js';
 import '../styles/shared-styles.js';
 
@@ -25,6 +26,7 @@ class UserRoute extends PolymerElement {
                     <iron-icon icon="add-circle-outline"></iron-icon>&nbsp;Add review
                 </paper-button>
                 <ul>
+                    <paper-spinner id="spinner" active>...</paper-spinner>
                     <template id="reviews" is="dom-repeat" items="[[reviews]]" as="review">
                         <li>
                             <h1>[[review.game.name.es]]</h1>
@@ -74,8 +76,8 @@ class UserRoute extends PolymerElement {
                     reviews.map(review => {
                         firebase.database().ref('games').orderByChild('id').equalTo(review.uid).on('value', snapshot => {
                             review.game = Object.values(snapshot.val())[0];
-                            this.reviews.push(review);
-                            this.$.reviews.render();
+                            this.reviews = this.reviews.concat(review);
+                            this.$.spinner.toggleClass('hidden');
                         });
                     });
                 });
