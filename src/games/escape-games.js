@@ -2,7 +2,10 @@ import {
   html,
   PolymerElement
 } from '@polymer/polymer/polymer-element.js';
-import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-listbox/paper-listbox.js';
+import '@polymer/paper-item/paper-item.js';
+import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
 import '@polymer/paper-spinner/paper-spinner.js';
 import '../styles/shared-styles.js';
 
@@ -16,16 +19,6 @@ const sortByName = (a, b) => {
   return 0;
 };
 
-const sortByCity = (a, b) => {
-  if (a.city.name.es > b.city.name.es) {
-    return 1;
-  }
-  if (a.city.name.es < b.city.name.es) {
-    return -1;
-  }
-  return 0;
-}
-
 
 class EscapeGames extends PolymerElement {
   static get template() {
@@ -37,22 +30,25 @@ class EscapeGames extends PolymerElement {
         ul {
           padding: 0px;
         }
-        .name {
+        .w-50 {
           width: 50%;
         }
-        .company {
+        .w-30 {
           width: 30%;
         }
-        .city {
+        .w-20 {
           width: 20%;
         }
         .bold {
           font-weight: bold;
         }
-        .flex {
+        li.flex {
           justify-content: flex-start;
           align-items: center;
           margin-bottom: 8px;
+        }
+        p.flex {
+          justify-content: center;
         }
         .centered {
           display: flex;
@@ -66,30 +62,41 @@ class EscapeGames extends PolymerElement {
           --paper-spinner-layer-4-color: var(--app-tertiary-color);
         }
       </style>
-        <!-- <div class="card">
-          <paper-input></paper-input>
-        </div> -->
+        <div class="card flex">
+          <paper-dropdown-menu label="Filter by" on-selected-item-changed="_filterByChanged" no-animations class="dropdown-content w-30">
+            <paper-listbox slot="dropdown-content" selected="[[itemSelected]]">
+              <paper-item data-key="name">Name</paper-item>
+              <paper-item data-key="city">City</paper-item>
+              <paper-item data-key="valoration">Valoration</paper-item>
+              <paper-item data-key="company">Company</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+          <paper-input class="w-50" value="{{searchValue}}"></paper-input>
+        </div>
         <div class="card">
           <li class="flex">
-            <span class="bold company">Company</span>
-            <span class="bold name">Name</span>
-            <span class="bold city">City</span>
+            <span class="bold w-30">Company</span>
+            <span class="bold w-50">Name</span>
+            <span class="bold w-20">City</span>
             <br>
           </li>
           <ul>
             <template is="dom-repeat" items="[[games]]">
               <li class="flex" on-click="_navigateToGameView" data-game-id="[[item.id]]">
-                <span class="company">[[item.company.name]]</span>
-                <span class="name">[[item.name.es]]</span>
-                <span class="city">[[item.city.name.es]]</span>
+                <span class="w-30">[[item.company.name]]</span>
+                <span class="w-50">[[item.name.es]]</span>
+                <span class="w-20">[[item.city.name.es]]</span>
+                <span class="hidden">[[item.id]]</span>
                 <br>
               </li>
             </template>
           </ul>
           <div class="centered">
             <paper-spinner id="spinner" class="hidden" active>...</paper-spinner>
-            <paper-button id="moreButton" class="red" on-click="_retrieveNextPage">More</paper-button>
-          </div>          
+          </div>
+          <template is="dom-if" if="[[!games.length]]">
+            <p class="flex">No games to show</p>
+          </template>          
         </div>
     `;
   }
@@ -100,69 +107,63 @@ class EscapeGames extends PolymerElement {
         type: Array,
         value: []
       },
-      lastGame: Object,
+      searchValue: {
+        type: String,
+        value: '',
+        observer: '_valueChanged'
+      },
       pageSize: {
         type: Number,
         value: 25
       },
-      orderBy: {
-        type: String,
-        value: 'city'
-      }
+      filterBy: String,
+      itemSelected: Number
     }
   }
 
   ready() {
     super.ready();
-    this._retrieveNextPage();
+    this._filterByChanged();
   }
 
-  _retrieveNextPage() {
-    this._togglePagination();
-    firebase.database().ref('games').orderByChild(this._calculateChildFilter()).startAt(this._getLastOrderValue()).limitToFirst(this.pageSize + 1).on('value', snapshot => {
-      let values = Object.values(snapshot.val());
-      this.games = this.games.concat(values.sort(this._calculateSortFunction()));
-      this.lastGame = this.games.pop();
-      this._togglePagination();
+  _valueChanged() {
+    this._toggleSpinner();
+    firebase.database().ref('games').orderByChild(this._calculateChildFilter()).startAt(this.searchValue).endAt(this.searchValue + '\uf8ff').limitToFirst(this.pageSize).on('value', snapshot => {
+      let values = snapshot.val() ? Object.values(snapshot.val()) : [];
+      this.games = values.sort(sortByName);
+      this._toggleSpinner();
     });
   }
 
-  _togglePagination() {
+  _filterByChanged(event) {
+    let itemSelectedByName = {
+      name: 0,
+      city: 1,
+      valoration: 2,
+      company: 3
+    };
+    this.set('filterBy', event && event.detail.value ? event.detail.value.dataset.key : 'name');
+    this.set('itemSelected', itemSelectedByName[this.filterBy]);
+    this.set('searchValue', '');
+  }
+
+  _toggleSpinner() {
     this.$.spinner.toggleClass('hidden');
-    this.$.moreButton.toggleClass('hidden');
   }
 
-  _getLastOrderValue(){
-    let propertyKeyByOrder = {
-      name: this.lasGame && this.lastGame.name.es,
-      company: this.lasGame && this.lastGame.company.name,
-      city: this.lasGame && this.lastGame.city.name.es,
-      valoration: this.lasGame && this.lasGame.valoration.general
-    };
-    return propertyKeyByOrder[this.orderBy] || propertyKeyByOrder.name;
-  }
-
-  _calculateSortFunction(){
-    let sortFunctionByOrder = {
-      name: sortByName,
-      company: sortByCity,
-      city: sortByCity,
-      valoration: sortByCity
-    };
-    return sortFunctionByOrder[this.orderBy] || sortFunctionByOrder.name;
-  }
-
-  _calculateChildFilter(){
+  _calculateChildFilter() {
     let childFilterByOrder = {
       name: 'name/es',
-      company: 'company/name',
       city: 'city/name/es',
-      valoration: 'valoration/general'
+      valoration: 'valoration/general',
+      company: 'company/name'
     };
-    return childFilterByOrder[this.orderBy] || childFilterByOrder.name;
+    return childFilterByOrder[this.filterBy] || childFilterByOrder.name;
   }
+
   _navigateToGameView(event) {
-    console.log('Go to game', event.currentTarget);
+    let gameId = event.currentTarget.children[event.currentTarget.childElementCount - 2].innerHTML
+    console.log('Go to game', gameId);
   }
 }
 
