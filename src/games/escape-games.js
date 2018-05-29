@@ -16,6 +16,16 @@ const sortByName = (a, b) => {
   return 0;
 };
 
+const sortByCity = (a, b) => {
+  if (a.city.name.es > b.city.name.es) {
+    return 1;
+  }
+  if (a.city.name.es < b.city.name.es) {
+    return -1;
+  }
+  return 0;
+}
+
 
 class EscapeGames extends PolymerElement {
   static get template() {
@@ -90,21 +100,14 @@ class EscapeGames extends PolymerElement {
         type: Array,
         value: []
       },
-      lastGame: {
-        type: Object,
-        value: {
-          name: {
-            es: ''
-          }
-        }
-      },
+      lastGame: Object,
       pageSize: {
         type: Number,
         value: 25
       },
       orderBy: {
         type: String,
-        value: 'name'
+        value: 'city'
       }
     }
   }
@@ -116,9 +119,9 @@ class EscapeGames extends PolymerElement {
 
   _retrieveNextPage() {
     this._togglePagination();
-    firebase.database().ref('games').orderByChild(this._calculateChildFilter()).startAt(this.lastGame.name.es).limitToFirst(this.pageSize + 1).on('value', snapshot => {
+    firebase.database().ref('games').orderByChild(this._calculateChildFilter()).startAt(this._getLastOrderValue()).limitToFirst(this.pageSize + 1).on('value', snapshot => {
       let values = Object.values(snapshot.val());
-      this.games = this.games.concat(values.sort(sortByName));
+      this.games = this.games.concat(values.sort(this._calculateSortFunction()));
       this.lastGame = this.games.pop();
       this._togglePagination();
     });
@@ -129,8 +132,34 @@ class EscapeGames extends PolymerElement {
     this.$.moreButton.toggleClass('hidden');
   }
 
+  _getLastOrderValue(){
+    let propertyKeyByOrder = {
+      name: this.lasGame && this.lastGame.name.es,
+      company: this.lasGame && this.lastGame.company.name,
+      city: this.lasGame && this.lastGame.city.name.es,
+      valoration: this.lasGame && this.lasGame.valoration.general
+    };
+    return propertyKeyByOrder[this.orderBy] || propertyKeyByOrder.name;
+  }
+
+  _calculateSortFunction(){
+    let sortFunctionByOrder = {
+      name: sortByName,
+      company: sortByCity,
+      city: sortByCity,
+      valoration: sortByCity
+    };
+    return sortFunctionByOrder[this.orderBy] || sortFunctionByOrder.name;
+  }
+
   _calculateChildFilter(){
-    return 'name/es';
+    let childFilterByOrder = {
+      name: 'name/es',
+      company: 'company/name',
+      city: 'city/name/es',
+      valoration: 'valoration/general'
+    };
+    return childFilterByOrder[this.orderBy] || childFilterByOrder.name;
   }
   _navigateToGameView(event) {
     console.log('Go to game', event.currentTarget);

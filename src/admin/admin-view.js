@@ -23,7 +23,7 @@ class AdminView extends PolymerElement {
     event.target
     const baseUrl = 'https://www.escaperoomlover.com/api/es/public/game?page=';
     const firstPage = baseUrl + '1';
-    let games = [];
+    let resultGames = {};
     fetch(firstPage)
       .then(response => response.json())
       .then(myJson => {
@@ -32,11 +32,11 @@ class AdminView extends PolymerElement {
         Promise.all(urls.map(url => fetch(url)))
           .then(responses =>
             Promise.all(responses.map(response => response.json()))
-          ).then(rawGames => {
-            rawGames.map(rawGame => {
-              games = games.concat(rawGame.games);
+          ).then(allRawGames => {
+            allRawGames.map(rawGames => {
+              rawGames.games.map(game => resultGames[game.id] = game);
             });
-            firebase.database().ref('games').set(games).then(() => {
+            firebase.database().ref('games').set(resultGames).then(() => {
                 alert('Games updated');
               })
               .catch((error) => {

@@ -87,8 +87,6 @@ class UserReview extends PolymerElement {
                     --paper-toggle-button-unchecked-bar-color:  var(--app-tertiary-color);
                     --paper-toggle-button-unchecked-button-color:  var(--app-secondary-color);
                 }
-
-                
             </style>
             <div class="card">
                 <div class="search">
