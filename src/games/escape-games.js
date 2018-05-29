@@ -30,6 +30,9 @@ class EscapeGames extends PolymerElement {
         ul {
           padding: 0px;
         }
+        .w-80 {
+          width: 80%;
+        }
         .w-50 {
           width: 50%;
         }
@@ -49,6 +52,7 @@ class EscapeGames extends PolymerElement {
         }
         p.flex {
           justify-content: center;
+          color: var(--app-primary-color);
         }
         .centered {
           display: flex;
@@ -61,9 +65,12 @@ class EscapeGames extends PolymerElement {
           --paper-spinner-layer-3-color: var(--app-primary-color);
           --paper-spinner-layer-4-color: var(--app-tertiary-color);
         }
+        paper-input, paper-dropdown-menu {
+          background-color: var(--app-secondary-color);
+        }
       </style>
         <div class="card flex">
-          <paper-dropdown-menu label="Filter by" on-selected-item-changed="_filterByChanged" no-animations class="dropdown-content w-30">
+          <paper-dropdown-menu label="Filter by" on-selected-item-changed="_filterByChanged" noink no-animations class="dropdown-content w-20">
             <paper-listbox slot="dropdown-content" selected="[[itemSelected]]">
               <paper-item data-key="name">Name</paper-item>
               <paper-item data-key="city">City</paper-item>
@@ -71,7 +78,7 @@ class EscapeGames extends PolymerElement {
               <paper-item data-key="company">Company</paper-item>
             </paper-listbox>
           </paper-dropdown-menu>
-          <paper-input class="w-50" value="{{searchValue}}"></paper-input>
+          <paper-input class="w-80" value="{{searchValue}}"></paper-input>
         </div>
         <div class="card">
           <li class="flex">
@@ -128,7 +135,7 @@ class EscapeGames extends PolymerElement {
 
   _valueChanged() {
     this._toggleSpinner();
-    firebase.database().ref('games').orderByChild(this._calculateChildFilter()).startAt(this.searchValue).endAt(this.searchValue + '\uf8ff').limitToFirst(this.pageSize).on('value', snapshot => {
+    firebase.database().ref('games').orderByChild(this._calculateChildFilter()).startAt(this.searchValue).endAt(this.searchValue + '\uf8ff').limitToFirst(this.pageSize).once('value', snapshot => {
       let values = snapshot.val() ? Object.values(snapshot.val()) : [];
       this.games = values.sort(sortByName);
       this._toggleSpinner();
