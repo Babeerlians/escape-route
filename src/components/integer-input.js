@@ -87,12 +87,18 @@ class IntegerInput extends PolymerElement {
         if (this.value < this.max) {
             this.value += this.step;
         }
+        else{
+            this.value = this.min;
+        }
         return false;
     }
 
     _substract() {
         if (this.value > this.min) {
             this.value -= this.step;
+        }
+        else{
+            this.value = this.max;
         }
         return false;
     }
