@@ -54,6 +54,10 @@ class EscapeGames extends PolymerElement {
           justify-content: center;
           color: var(--app-primary-color);
         }
+        a.flex {
+          width: 100%;
+          cursor: pointer;
+        }
         .centered {
           display: flex;
           align-items: center;
@@ -70,7 +74,7 @@ class EscapeGames extends PolymerElement {
         }
       </style>
         <div class="card flex">
-          <paper-dropdown-menu label="Filter by" on-selected-item-changed="_filterByChanged" noink no-animations class="dropdown-content w-20">
+          <paper-dropdown-menu label="Filter by" on-selected-item-changed="_filterByChanged" no-animations class="dropdown-content w-20">
             <paper-listbox slot="dropdown-content" selected="[[itemSelected]]">
               <paper-item data-key="name">Name</paper-item>
               <paper-item data-key="city">City</paper-item>
@@ -89,12 +93,13 @@ class EscapeGames extends PolymerElement {
           </li>
           <ul>
             <template is="dom-repeat" items="[[games]]">
-              <li class="flex" on-click="_navigateToGameView" data-game-id="[[item.id]]">
-                <span class="w-30">[[item.company.name]]</span>
-                <span class="w-50">[[item.name.es]]</span>
-                <span class="w-20">[[item.city.name.es]]</span>
-                <span class="hidden">[[item.id]]</span>
-                <br>
+              <li class="flex">
+                <a class="flex" on-click="_navigateToGameView" data-game-id="[[item.id]]">
+                  <span class="w-30">[[item.company.name]]</span>
+                  <span class="w-50">[[item.name.es]]</span>
+                  <span class="w-20">[[item.city.name.es]]</span>
+                  <span class="hidden">[[item.id]]</span>
+                </a>
               </li>
             </template>
           </ul>
@@ -169,7 +174,7 @@ class EscapeGames extends PolymerElement {
   }
 
   _navigateToGameView(event) {
-    let gameId = event.currentTarget.children[event.currentTarget.childElementCount - 2].innerHTML
+    let gameId = event.currentTarget.children[event.currentTarget.childElementCount - 1].innerHTML
     console.log('Go to game', gameId);
   }
 }

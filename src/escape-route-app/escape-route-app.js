@@ -109,7 +109,7 @@ class EscapeRouteApp extends PolymerElement {
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
             <login-module name="login" on-logged="_navigateToRoute"></login-module>
             <user-route name="route" on-add-review="_navigateToReview"></user-route>
-            <escape-games name="games"></escape-games>
+            <escape-games name="games" route="[[subroute]]"></escape-games>
             <user-review name="review" on-saved="_navigateToRoute" on-discarded="_navigateToRoute"></user-review>
             <escape-mates name="mates"></escape-mates>
             <admin-view name="admin"></admin-view>
