@@ -133,8 +133,8 @@ class EscapeGames extends PolymerElement {
     }
   }
 
-  ready() {
-    super.ready();
+  connectedCallback() {
+    super.connectedCallback();
     this._filterByChanged();
   }
 
@@ -175,7 +175,11 @@ class EscapeGames extends PolymerElement {
 
   _navigateToGameView(event) {
     let gameId = event.currentTarget.children[event.currentTarget.childElementCount - 1].innerHTML
-    console.log('Go to game', gameId);
+    this.dispatchEvent(new CustomEvent('game-selected', {
+      detail: {
+        gameId
+      }
+    }));
   }
 }
 
