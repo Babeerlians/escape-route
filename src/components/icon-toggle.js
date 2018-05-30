@@ -79,8 +79,8 @@ class IconToggle extends PolymerElement {
     };
   }
 
-  ready() {
-    super.ready();
+  connectedCallback() {
+    super.connectedCallback();
     this.icons = [];
     for (let i = 1; i <= this.total; i++) {
       this.icons.push({

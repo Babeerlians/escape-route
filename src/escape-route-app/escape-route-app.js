@@ -109,7 +109,8 @@ class EscapeRouteApp extends PolymerElement {
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
             <login-module name="login" on-logged="_navigateToRoute"></login-module>
             <user-route name="route" on-add-review="_navigateToReview"></user-route>
-            <escape-games name="games"></escape-games>
+            <escape-games name="games" on-game-selected="_navigateToGame"></escape-games>
+            <game-view name="game" route="[[subroute]]"></game-view>
             <user-review name="review" on-saved="_navigateToRoute" on-discarded="_navigateToRoute"></user-review>
             <escape-mates name="mates"></escape-mates>
             <admin-view name="admin"></admin-view>
@@ -192,6 +193,9 @@ class EscapeRouteApp extends PolymerElement {
     this._navigateToPath('route');
   }
 
+  _navigateToGame(event) {
+    this._navigateToPath('game/' + event.detail.gameId);
+  }
   _navigateToReview() {
     this._navigateToPath('review');
   }
@@ -203,6 +207,9 @@ class EscapeRouteApp extends PolymerElement {
         break;
       case 'games':
         import ('../games/escape-games.js');
+        break;
+      case 'game':
+        import ('../games/game-view.js');
         break;
       case 'login':
         import ('../login/login-module.js');

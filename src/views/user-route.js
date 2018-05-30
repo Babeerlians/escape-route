@@ -53,8 +53,8 @@ class UserRoute extends PolymerElement {
         }
     }
 
-    ready() {
-        super.ready();
+    connectedCallback() {
+        super.connectedCallback();
         this._getReviews();
     }
 

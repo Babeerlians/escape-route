@@ -53,8 +53,8 @@ class EscapeMates extends PolymerElement {
         }
     }
 
-    ready() {
-        super.ready();
+    connectedCallback() {
+        super.connectedCallback();
         this._getMates();
     }
 

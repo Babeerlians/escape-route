@@ -33,7 +33,7 @@ class SearchEscape extends PolymerElement {
                     <paper-button on-click="_selectItem">{{item.name.es}}</paper-button>
                 </template>
             </iron-collapse>
-            <escape-view id="inputWithButton" clear class="hidden" on-clear="_clearEscape"></escape-view>
+            <escape-view id="inputWithButton" item-value="[[itemValue]]" clear class="hidden" on-clear="_clearEscape"></escape-view>
         `;
     }
 
@@ -90,7 +90,6 @@ class SearchEscape extends PolymerElement {
         this.set('itemValue', event.model.item);
         this.set('idescape', event.model.item.id);
         collapse.toggle();
-        this.$.inputWithButton.itemValue = event.model.item;
         this.$.inputWithButton.classList.remove("hidden");
         this.$.inputSearch.toggleClass("hidden");
     }
