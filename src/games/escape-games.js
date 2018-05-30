@@ -139,7 +139,7 @@ class EscapeGames extends PolymerElement {
                       <iron-icon title="Ambience" icon="image:color-lens"></iron-icon>
                     </div>
                     <div class="light">
-                      <span>[[item.valoration.general]]</span>
+                      <span>[[item.valoration.difficulty]]</span>
                       <iron-icon title="Difficulty" icon="lock"></iron-icon>
                     </div>
                     <div>
