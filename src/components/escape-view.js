@@ -84,7 +84,7 @@ class EscapeView extends PolymerElement {
         return itemValue == null ? true : JSON.stringify(itemValue) === JSON.stringify({});
     }
 
-    _toggleEscape(toggle) {
+    _toggleEscape() {
         if (!this.$.escape.opened) {
             let uluru = {
                 lat: parseFloat(this.itemValue.company.latitude),
@@ -104,9 +104,10 @@ class EscapeView extends PolymerElement {
     }
 
     showEscape() {
-        if (!this.$.escape.opened) {
-            this._toggleEscape();
+        if (this.$.escape.opened) {
+            this.$.escape.toggle();
         }
+        this._toggleEscape();
     }
 
     _hideEscape(event) {
@@ -116,6 +117,14 @@ class EscapeView extends PolymerElement {
     _clearInput(event) {
         this.set('itemValue', {});
         this.dispatchEvent(new CustomEvent('clear'));
+    }
+
+    toggleClass(className){
+        if(this.classList.value.indexOf(className)>=0){
+            this.classList.add(className);
+        } else {
+            this.classList.remove(className);
+        }
     }
 }
 
