@@ -57,7 +57,7 @@ class EscapeView extends PolymerElement {
             </template>
             <iron-collapse id="escape">
                 <h1>[[itemValue.name.es]]</h1>
-                <div><h3>Description</h3><p>[[itemValue.description]]</p></div>
+                <div id="description"></div>
                 <div><h3>Duration</h3><p>[[itemValue.duration]]</p></div>
                 <div><h3>Audience age</h3><p>[[itemValue.audience_age]]</p></div>
                 <div><h3>Localization</h3><div id="map" class="smallMap"></div></div>
@@ -98,7 +98,8 @@ class EscapeView extends PolymerElement {
                 position: uluru,
                 map: map
             });
-        } 
+        }
+        this.$.description.innerHTML = this.itemValue.description;
         this.$.escape.toggle();
     }
 
