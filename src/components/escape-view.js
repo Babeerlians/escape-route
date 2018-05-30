@@ -48,7 +48,7 @@ class EscapeView extends PolymerElement {
                 }
             </style>
             <template is="dom-if" if="[[!isEmpty(itemValue)]]">
-                <div class="inputWithButton">
+                <div id="escapeButton" class="inputWithButton">
                         <paper-button class="red" raised on-click="_toggleEscape">[[itemValue.name.es]]</paper-button>
                         <template is="dom-if" if="[[clear]]">
                             <paper-icon-button on-click="_clearInput" icon="clear" alt="Clear" title="clear"></paper-icon-button>
@@ -61,7 +61,7 @@ class EscapeView extends PolymerElement {
                 <div><h3>Duration</h3><p>[[itemValue.duration]]</p></div>
                 <div><h3>Audience age</h3><p>[[itemValue.audience_age]]</p></div>
                 <div><h3>Localization</h3><div id="map" class="smallMap"></div></div>
-                <div class="buttons">
+                <div id="collapseButton" class="buttons">
                     <paper-icon-button on-click="_hideEscape" icon="expand-less" alt="Collapse" title="Collapse"></paper-icon-button>
                 </div>
             </iron-collapse>

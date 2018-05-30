@@ -221,13 +221,13 @@ class EscapeGames extends PolymerElement {
   }
 
   _calculateStartSearchValue() {
-    let numbericValue = Number.parseInt(this.searchValue) || 0;
+    let numbericValue = Number.parseFloat(this.searchValue) || 0;
     return this.itemSelected > 2 ? numbericValue : this.searchValue;
   }
 
   _calculateEndSearchValue() {
-    let numbericValue = Number.parseInt(this.searchValue) || 0;
-    return this.itemSelected > 2 ? numbericValue + 1 : this.searchValue + '\uf8ff';
+    let numbericValue = Number.parseFloat(this.searchValue) || 0;
+    return this.itemSelected > 2 ? numbericValue + .99 : this.searchValue + '\uf8ff';
   }
 
   _calculateChildFilter() {
