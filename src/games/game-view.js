@@ -46,7 +46,7 @@ class EscapeGames extends PolymerElement {
   _toggleSpinner() {
     if (Object.is(this.route.prefix, '/game')) {
       this.$.escapeView.className = '';
-      this.$.escapeView._showEscape();
+      this.$.escapeView.showEscape();
       this.$.spinner.toggleClass('hidden');
     }
   }

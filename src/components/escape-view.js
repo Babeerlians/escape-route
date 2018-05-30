@@ -1,4 +1,7 @@
-import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
+import {
+    html,
+    PolymerElement
+} from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-dialog/paper-dialog.js';
 import '@polymer/paper-styles/shadow.js';
@@ -6,7 +9,7 @@ import '../styles/shared-styles.js';
 
 class EscapeView extends PolymerElement {
     static get template() {
-        return html`
+        return html `
             <style include="shared-styles">
                 :host {
                     display: block;
@@ -46,7 +49,7 @@ class EscapeView extends PolymerElement {
             </style>
             <template is="dom-if" if="[[!isEmpty(itemValue)]]">
                 <div class="inputWithButton">
-                        <paper-button class="red" raised on-click="_showEscape">[[itemValue.name.es]]</paper-button>
+                        <paper-button class="red" raised on-click="_toggleEscape">[[itemValue.name.es]]</paper-button>
                         <template is="dom-if" if="[[clear]]">
                             <paper-icon-button on-click="_clearInput" icon="clear" alt="Clear" title="clear"></paper-icon-button>
                         </template>
@@ -65,7 +68,7 @@ class EscapeView extends PolymerElement {
         `;
     }
 
-    static get properties() { 
+    static get properties() {
         return {
             itemValue: {
                 type: Object,
@@ -81,26 +84,34 @@ class EscapeView extends PolymerElement {
         return itemValue == null ? true : JSON.stringify(itemValue) === JSON.stringify({});
     }
 
-    _showEscape(event) {
-        if(!this.$.escape.opened) {
-            let uluru = {lat:parseFloat(this.itemValue.company.latitude), 
-                lng:parseFloat(this.itemValue.company.longitude)};
+    _toggleEscape(toggle) {
+        if (!this.$.escape.opened) {
+            let uluru = {
+                lat: parseFloat(this.itemValue.company.latitude),
+                lng: parseFloat(this.itemValue.company.longitude)
+            };
             let map = new google.maps.Map(this.$.map, {
-              zoom: 15,
-              center: uluru
+                zoom: 15,
+                center: uluru
             });
             let marker = new google.maps.Marker({
-              position: uluru,
-              map: map
+                position: uluru,
+                map: map
             });
-        }
+        } 
         this.$.escape.toggle();
+    }
+
+    showEscape() {
+        if (!this.$.escape.opened) {
+            this._toggleEscape();
+        }
     }
 
     _hideEscape(event) {
         this.$.escape.toggle();
     }
-    
+
     _clearInput(event) {
         this.set('itemValue', {});
         this.dispatchEvent(new CustomEvent('clear'));
