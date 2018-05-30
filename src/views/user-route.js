@@ -45,6 +45,10 @@ class UserRoute extends PolymerElement {
                     margin-top: 12px;
                 }
             
+                .note {
+                    margin-top: 12px;
+                }
+
                 .-card-content {
                     margin: var(--card-margin);
                 }
@@ -129,9 +133,12 @@ class UserRoute extends PolymerElement {
                                         <iron-icon title="General" icon="star"></iron-icon>
                                     </div>
                                 </div>
+                                <div class="flex between note">
+                                        <span>[[review.note]]</span>
+                                </div>
                             </div>
                             <div class="card-actions">
-                                <a href="/game/[[item.id]]">
+                                <a href="/game/[[review.game.id]]">
                                     <paper-button>View</paper-button>
                                 </a>
                             </div>
