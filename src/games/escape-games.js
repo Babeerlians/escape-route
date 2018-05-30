@@ -58,6 +58,10 @@ class EscapeGames extends PolymerElement {
         .between {
           justify-content: space-between;
         }
+        .valoration {
+          color: var(--app-primary-color);
+          margin-top: 12px;
+        }
         .-card-content {
           margin: var(--card-margin);
         }
@@ -99,8 +103,9 @@ class EscapeGames extends PolymerElement {
             <paper-listbox slot="dropdown-content" selected="[[itemSelected]]">
               <paper-item data-key="name">Name</paper-item>
               <paper-item data-key="city">City</paper-item>
-              <!-- <paper-item data-key="valoration">Valoration</paper-item> -->
               <paper-item data-key="company">Company</paper-item>
+              <paper-item data-key="duration">Duration</paper-item>
+              <paper-item data-key="valoration">Valoration</paper-item>
             </paper-listbox>
           </paper-dropdown-menu>
           <paper-input class="w-80" value="{{searchValue}}"></paper-input>
@@ -126,10 +131,20 @@ class EscapeGames extends PolymerElement {
                     <span>[[item.min_gamer]]-[[item.max_gamer]]</span>
                     <iron-icon title="Gamers" icon="social:people"></iron-icon>
                   </div>
-                  <template is="dom-if" if="[[!games.length]]">
+                </div>
+                <div class="flex between valoration">
+                  <template is="dom-if" if="[[item.valoration.general]]">
+                  <div class="light">
+                      <span>[[item.valoration.ambience]]</span>
+                      <iron-icon title="Ambience" icon="image:color-lens"></iron-icon>
+                    </div>
                     <div class="light">
                       <span>[[item.valoration.general]]</span>
-                      <iron-icon title="Valoration" icon="star"></iron-icon>
+                      <iron-icon title="Difficulty" icon="lock"></iron-icon>
+                    </div>
+                    <div>
+                      <span>[[item.valoration.general]]</span>
+                      <iron-icon title="General" icon="star"></iron-icon>
                     </div>
                   </template> 
                 </div>
@@ -173,9 +188,9 @@ class EscapeGames extends PolymerElement {
     this._filterByChanged();
   }
 
-  _valueChanged() {
+  _valueChanged(value) {
     this._toggleSpinner();
-    firebase.database().ref('games').orderByChild(this._calculateChildFilter()).startAt(this.searchValue).endAt(this.searchValue + '\uf8ff').limitToFirst(this.pageSize).once('value', snapshot => {
+    firebase.database().ref('games').orderByChild(this._calculateChildFilter()).startAt(this._calculateStartSearchValue()).endAt(this._calculateEndSearchValue()).limitToFirst(this.pageSize).once('value', snapshot => {
       let values = snapshot.val() ? Object.values(snapshot.val()) : [];
       this.games = values.sort(sortByName);
       this._toggleSpinner();
@@ -186,10 +201,17 @@ class EscapeGames extends PolymerElement {
     let itemSelectedByName = {
       name: 0,
       city: 1,
-      valoration: 2,
-      company: 3
+      company: 2,
+      duration: 3,
+      valoration: 4
     };
-    this.set('filterBy', event && event.detail.value ? event.detail.value.dataset.key : 'name');
+    if (event && event.detail.value) {
+      if (!Object.is(this.filterBy, event.detail.value.dataset.key)) {
+        this.set('filterBy', event.detail.value.dataset.key);
+      }
+    } else {
+      this.set('filterBy', 'name');
+    }
     this.set('itemSelected', itemSelectedByName[this.filterBy]);
     this.set('searchValue', '');
   }
@@ -198,12 +220,23 @@ class EscapeGames extends PolymerElement {
     this.$.spinner.toggleClass('hidden');
   }
 
+  _calculateStartSearchValue() {
+    let numbericValue = Number.parseInt(this.searchValue) || 0;
+    return this.itemSelected > 2 ? numbericValue : this.searchValue;
+  }
+
+  _calculateEndSearchValue() {
+    let numbericValue = Number.parseInt(this.searchValue) || 0;
+    return this.itemSelected > 2 ? numbericValue + 1 : this.searchValue + '\uf8ff';
+  }
+
   _calculateChildFilter() {
     let childFilterByOrder = {
       name: 'name/es',
       city: 'city/name/es',
-      valoration: 'valoration/general',
-      company: 'company/name'
+      company: 'company/name',
+      duration: 'duration',
+      valoration: 'valoration/general'
     };
     return childFilterByOrder[this.filterBy] || childFilterByOrder.name;
   }
