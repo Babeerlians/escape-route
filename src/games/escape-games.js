@@ -3,7 +3,6 @@ import {
   PolymerElement
 } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-icon/iron-icon.js';
-import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
@@ -65,11 +64,13 @@ class EscapeGames extends PolymerElement {
         div.light {
           color: var(--app-tertiary-color);
           text-align: right;
+          font-size: 14px;
         }
         paper-card {
           width: var(--card-width);
           margin: var(--card-margin);
           --paper-card-header-text: {
+            /*color: white;*/
             color: var(--app-secondary-color);
             background-color: rgba(0,0,0, 0.5);
             width: 100%;
@@ -98,7 +99,7 @@ class EscapeGames extends PolymerElement {
             <paper-listbox slot="dropdown-content" selected="[[itemSelected]]">
               <paper-item data-key="name">Name</paper-item>
               <paper-item data-key="city">City</paper-item>
-              <paper-item data-key="valoration">Valoration</paper-item>
+              <!-- <paper-item data-key="valoration">Valoration</paper-item> -->
               <paper-item data-key="company">Company</paper-item>
             </paper-listbox>
           </paper-dropdown-menu>
@@ -110,11 +111,27 @@ class EscapeGames extends PolymerElement {
             <paper-card heading="[[item.name.es]]" alt="[[item.name.es]]" image="[[item.narrowImage.translations.es]]">
               <div class="card-content">
                 <div class="flex between">
-                  <span>[[item.company.name]]</span>
+                  <span class="bold" title="Company">[[item.company.name]]</span>
                   <div class="light">
-                    <iron-icon icon="communication:location-on"></iron-icon>
+                    <iron-icon title="City" icon="communication:location-on"></iron-icon>
                     <span>[[item.city.name.es]]</span>
                   </div>
+                </div>
+                <div class="flex between">
+                  <div class="light">
+                    <iron-icon title="Duration" icon="image:timelapse"></iron-icon>
+                    <span>[[item.duration]] min</span>
+                  </div>
+                  <div class="light">
+                    <span>[[item.min_gamer]]-[[item.max_gamer]]</span>
+                    <iron-icon title="Gamers" icon="social:people"></iron-icon>
+                  </div>
+                  <template is="dom-if" if="[[!games.length]]">
+                    <div class="light">
+                      <span>[[item.valoration.general]]</span>
+                      <iron-icon title="Valoration" icon="star"></iron-icon>
+                    </div>
+                  </template> 
                 </div>
               </div>
               <div class="card-actions">

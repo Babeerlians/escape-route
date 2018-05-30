@@ -23,6 +23,10 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         color: white;
       }
       
+      .bold {
+        font-weight: bold;
+      }
+
       .circle {
         display: inline-block;
         width: 64px;
