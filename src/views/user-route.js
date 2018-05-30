@@ -12,78 +12,88 @@ import '../styles/shared-styles.js';
 
 class UserRoute extends PolymerElement {
     static get template() {
-        return html `
+        return html`
             <style include="shared-styles">
                 :host {
-                --card-margin: 12px;
-                --card-width: 500px;
-                display: block;
+                    --card-margin: 12px;
+                    --card-width: 500px;
+                    display: block;
                 }
+            
                 p.flex {
-                justify-content: center;
-                color: var(--app-primary-color);
+                    justify-content: center;
+                    color: var(--app-primary-color);
                 }
+            
                 a.flex {
-                width: 100%;
-                cursor: pointer;
+                    width: 100%;
+                    cursor: pointer;
                 }
+            
                 div.grid {
                     flex-wrap: wrap;
                     justify-content: space-around;
                     margin-top: 1em;
                 }
+            
                 .between {
                     justify-content: space-between;
                 }
+            
                 .valoration {
                     color: var(--app-primary-color);
                     margin-top: 12px;
                 }
+            
                 .-card-content {
-                margin: var(--card-margin);
+                    margin: var(--card-margin);
                 }
+            
                 div.light {
-                color: var(--app-tertiary-color);
-                text-align: right;
-                font-size: 14px;
+                    color: var(--app-tertiary-color);
+                    text-align: right;
+                    font-size: 14px;
                 }
+            
                 paper-card {
-                width: var(--card-width);
-                margin: var(--card-margin);
-                --paper-card-header-text: {
-                    /*color: white;*/
-                    color: var(--app-secondary-color);
-                    background-color: rgba(0,0,0, 0.5);
-                    width: 100%;
-                    box-sizing: border-box;
-                };
-                --paper-card-header-image: {
-                    min-height: 
-                };
+                    width: var(--card-width);
+                    margin: var(--card-margin);
+                    --paper-card-header-text: {
+                        /*color: white;*/
+                        color: var(--app-secondary-color);
+                        background-color: rgba(0, 0, 0, 0.5);
+                        width: 100%;
+                        box-sizing: border-box;
+                    }
+                    ;
+                    --paper-card-header-image: {
+                        min-height:
+                    }
+                    ;
                 }
+            
                 paper-spinner {
-                --paper-spinner-layer-1-color: var(--app-primary-color);
-                --paper-spinner-layer-2-color: var(--app-tertiary-color);
-                --paper-spinner-layer-3-color: var(--app-primary-color);
-                --paper-spinner-layer-4-color: var(--app-tertiary-color);
-                margin: var(--card-margin);
+                    --paper-spinner-layer-1-color: var(--app-primary-color);
+                    --paper-spinner-layer-2-color: var(--app-tertiary-color);
+                    --paper-spinner-layer-3-color: var(--app-primary-color);
+                    --paper-spinner-layer-4-color: var(--app-tertiary-color);
+                    margin: var(--card-margin);
                 }
-                paper-input, paper-dropdown-menu {
-                background-color: var(--app-secondary-color);
+            
+                paper-input,
+                paper-dropdown-menu {
+                    background-color: var(--app-secondary-color);
                 }
+            
                 .card-actions a {
-                color: var(--app-primary-color);
+                    color: var(--app-primary-color);
                 }
             </style>
             <div class="card">
-                <iron-flex-layout>
-                    <iron-image class="circle" alt="user profile picture" src="[[user.photoURL]]" sizing="cover"></iron-image>
-                    <paper-input readonly label="name" value="[[user.displayName]]"></paper-input>
-                </iron-flex-layout>
                 <paper-button raised noink class="red" on-click="_addReview">
                     <iron-icon icon="add-circle-outline"></iron-icon>&nbsp;Add review
                 </paper-button>
-                <paper-spinner id="spinner" active>...</paper-spinner>
+                <paper-spinner id="spinner"  class="hidden" active>...</paper-spinner>
                 <div class="flex grid">
                     <template id="reviews" is="dom-repeat" items="[[reviews]]" as="review">
                         <paper-card heading="[[review.game.name.es]]" alt="[[review.game.name.es]]" image="[[review.game.narrowImage.translations.es]]">
@@ -97,12 +107,12 @@ class UserRoute extends PolymerElement {
                                 </div>
                                 <div class="flex between">
                                     <div class="light">
-                                        <iron-icon title="Duration" icon="image:timelapse"></iron-icon>
-                                        <span>[[review.duration]] min</span>
+                                        <iron-icon title="Date" icon="event"></iron-icon>
+                                        <span>[[review.date]]</span>
                                     </div>
                                     <div class="light">
-                                        <span>[[review.game.min_gamer]]-[[review.game.max_gamer]]</span>
-                                        <iron-icon title="Gamers" icon="social:people"></iron-icon>
+                                        <iron-icon title="Completion" icon="[[review.completedIco]]"></iron-icon>
+                                        <span>[[review.completedText]] </span>
                                     </div>
                                 </div>
                                 <div class="flex between valoration">
@@ -111,7 +121,7 @@ class UserRoute extends PolymerElement {
                                         <iron-icon title="Ambience" icon="image:color-lens"></iron-icon>
                                     </div>
                                     <div class="light">
-                                        <span>[[review.valoration.general]]</span>
+                                        <span>[[review.valoration.difficulty]]</span>
                                         <iron-icon title="Difficulty" icon="lock"></iron-icon>
                                     </div>
                                     <div>
@@ -122,7 +132,7 @@ class UserRoute extends PolymerElement {
                             </div>
                             <div class="card-actions">
                                 <a href="/game/[[item.id]]">
-                                <paper-button>View</paper-button>
+                                    <paper-button>View</paper-button>
                                 </a>
                             </div>
                         </paper-card>
@@ -152,26 +162,33 @@ class UserRoute extends PolymerElement {
 
     _getReviews() {
         firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-                this.user = user;
-                firebase.database().ref('users/' + this.user.uid + '/reviews').once('value', snapshot => {
-                    this.reviews = [];
-                    let reviews = snapshot.val();
-                    for (let key in reviews) {
-                        reviews[key].uid = key;
-                    }
-                    reviews = reviews ? Object.values(reviews) : [];
-                    if(reviews.length === 0) this.$.spinner.toggleClass('hidden');
-                    reviews.map(review => {
-                        firebase.database().ref('games/'+review.uid).once('value', snapshot => {
-                            review.game = snapshot.val();
-                            this.reviews = this.reviews.concat(review);
-                            this.$.spinner.toggleClass('hidden');
-                        });
+            this.$.spinner.classList.remove('hidden');
+            this.user = user;
+            firebase.database().ref('users/' + this.user.uid + '/reviews').orderByChild('date').on('value', snapshot => {
+                this.reviews = [];
+                let reviews = snapshot.val();
+                for (let key in reviews) {
+                    reviews[key].uid = key;
+                }
+                reviews = reviews ? Object.values(reviews) : [];
+                this.$.spinner.classList.add('hidden');
+                reviews.map(review => {
+                    firebase.database().ref('games/' + review.uid).once('value', snapshot => {
+                        review.game = snapshot.val();
+                        review.completedIco = review.completed ? 'image:timelapse' : 'image:timer-off';
+                        review.completedText = this._calculateCompleteText(review);
+                        this.reviews = this.reviews.concat(review);                        
                     });
                 });
-            }
+            });
         });
+    }
+
+    _calculateCompleteText (review){
+        if(review.completed) {
+            return review.duration.minutes.toString().padStart(2,"0") + ":" + review.duration.seconds.toString().padStart(2,"0");
+        }
+        return 'Not completed';
     }
 }
 

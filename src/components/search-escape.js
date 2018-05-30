@@ -62,8 +62,8 @@ class SearchEscape extends PolymerElement {
 
     _valueChanged(newValue, oldValue) {
         if (this.searchValue.length > 2 && !Object.is(newValue, oldValue) && !this.isSelected) {
-            firebase.database().ref('games').orderByChild('name/es').startAt(this.searchValue).endAt(this.searchValue + '\uf8ff').limitToFirst(5).on('value', snapshot => {
-                this.choices = Object.values(snapshot.val());
+            firebase.database().ref('games').orderByChild('name/es').startAt(this.searchValue).endAt(this.searchValue + '\uf8ff').limitToFirst(5).once('value', snapshot => {
+                this.choices = snapshot.val() ? Object.values(snapshot.val()) : [];
                 let collapse = this.$.collapse;
                 if (this.choices.length > 0) {
                     if (!collapse.opened) {
