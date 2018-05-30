@@ -113,7 +113,7 @@ class UserReview extends PolymerElement {
                     <div class="valoration">
                         <icon-toggle id="general" total=5 icon="star" value={{general}} title="General"></icon-toggle>
                         <icon-toggle id="difficulty" total=5 icon="lock" value={{difficulty}} title="Difficulty"></icon-toggle>
-                        <icon-toggle id="ambience" total=5 icon="home" value={{ambience}} title="Ambience"></icon-toggle>
+                        <icon-toggle id="ambience" total=5 icon="image:color-lens" value={{ambience}} title="Ambience"></icon-toggle>
                     </div>
                 </div>
                 <div class="mates">
