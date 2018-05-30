@@ -2,9 +2,13 @@ import {
   html,
   PolymerElement
 } from '@polymer/polymer/polymer-element.js';
+import '@polymer/iron-icon/iron-icon.js';
+import '@polymer/iron-icons/iron-icons.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
+import '@polymer/paper-card/paper-card.js';
+import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
 import '@polymer/paper-spinner/paper-spinner.js';
 import '../styles/shared-styles.js';
@@ -25,30 +29,20 @@ class EscapeGames extends PolymerElement {
     return html `
       <style include="shared-styles">
         :host {
+          --card-margin: 12px;
+          --card-width: 300px;
           display: block;
-        }
-        ul {
-          padding: 0px;
-        }
-        .w-80 {
-          width: 80%;
-        }
-        .w-50 {
-          width: 50%;
-        }
-        .w-30 {
-          width: 30%;
-        }
-        .w-20 {
-          width: 20%;
-        }
-        .bold {
-          font-weight: bold;
         }
         li.flex {
           justify-content: flex-start;
           align-items: center;
           margin-bottom: 8px;
+        }
+        .w-80 {
+          width: 80%;
+        }
+        .w-20 {
+          width: 20%;
         }
         p.flex {
           justify-content: center;
@@ -58,19 +52,45 @@ class EscapeGames extends PolymerElement {
           width: 100%;
           cursor: pointer;
         }
-        .centered {
-          display: flex;
-          align-items: center;
-          flex-direction: column;
+        div.grid {
+          flex-wrap: wrap;
+          justify-content: space-around;
+        }
+        .between {
+          justify-content: space-between;
+        }
+        .-card-content {
+          margin: var(--card-margin);
+        }
+        div.light {
+          color: var(--app-tertiary-color);
+          text-align: right;
+        }
+        paper-card {
+          width: var(--card-width);
+          margin: var(--card-margin);
+          --paper-card-header-text: {
+            color: var(--app-secondary-color);
+            background-color: rgba(0,0,0, 0.5);
+            width: 100%;
+            box-sizing: border-box;
+          };
+          --paper-card-header-image: {
+            min-height: 
+          };
         }
         paper-spinner {
           --paper-spinner-layer-1-color: var(--app-primary-color);
           --paper-spinner-layer-2-color: var(--app-tertiary-color);
           --paper-spinner-layer-3-color: var(--app-primary-color);
           --paper-spinner-layer-4-color: var(--app-tertiary-color);
+          margin: var(--card-margin);
         }
         paper-input, paper-dropdown-menu {
           background-color: var(--app-secondary-color);
+        }
+        .card-actions a {
+          color: var(--app-primary-color);
         }
       </style>
         <div class="card flex">
@@ -83,29 +103,27 @@ class EscapeGames extends PolymerElement {
             </paper-listbox>
           </paper-dropdown-menu>
           <paper-input class="w-80" value="{{searchValue}}"></paper-input>
+          <paper-spinner id="spinner" class="hidden" active>...</paper-spinner>
         </div>
-        <div class="card">
-          <li class="flex">
-            <span class="bold w-30">Company</span>
-            <span class="bold w-50">Name</span>
-            <span class="bold w-20">City</span>
-            <br>
-          </li>
-          <ul>
-            <template is="dom-repeat" items="[[games]]">
-              <li class="flex">
-                <a class="flex" on-click="_navigateToGameView" data-game-id="[[item.id]]">
-                  <span class="w-30">[[item.company.name]]</span>
-                  <span class="w-50">[[item.name.es]]</span>
-                  <span class="w-20">[[item.city.name.es]]</span>
-                  <span class="hidden">[[item.id]]</span>
+        <div class="flex grid">
+          <template is="dom-repeat" items="[[games]]">
+            <paper-card heading="[[item.name.es]]" alt="[[item.name.es]]" image="[[item.narrowImage.translations.es]]">
+              <div class="card-content">
+                <div class="flex between">
+                  <span>[[item.company.name]]</span>
+                  <div class="light">
+                    <iron-icon icon="communication:location-on"></iron-icon>
+                    <span>[[item.city.name.es]]</span>
+                  </div>
+                </div>
+              </div>
+              <div class="card-actions">
+                <a href="/game/[[item.id]]">
+                  <paper-button>View</paper-button>
                 </a>
-              </li>
-            </template>
-          </ul>
-          <div class="centered">
-            <paper-spinner id="spinner" class="hidden" active>...</paper-spinner>
-          </div>
+              </div>
+            </paper-card>
+          </template>
           <template is="dom-if" if="[[!games.length]]">
             <p class="flex">No games to show</p>
           </template>          
@@ -171,15 +189,6 @@ class EscapeGames extends PolymerElement {
       company: 'company/name'
     };
     return childFilterByOrder[this.filterBy] || childFilterByOrder.name;
-  }
-
-  _navigateToGameView(event) {
-    let gameId = event.currentTarget.children[event.currentTarget.childElementCount - 1].innerHTML
-    this.dispatchEvent(new CustomEvent('game-selected', {
-      detail: {
-        gameId
-      }
-    }));
   }
 }
 
