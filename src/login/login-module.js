@@ -25,10 +25,10 @@ class LoginModule extends PolymerElement {
   connectedCallback() {
     super.connectedCallback();
     firebase.auth().onAuthStateChanged(user => {
-      if (user) {
+      if (user && this.route && Object.is(this.route.prefix, '/login')) {
         this.dispatchEvent(new CustomEvent('logged', {
           detail: {
-            user: user
+            user
           }
         }));
       }
@@ -41,10 +41,8 @@ class LoginModule extends PolymerElement {
         const user = {
           [event.detail.user.uid]: {
             displayName: event.detail.user.displayName,
-            email: event.detail.user.email,
-            mates: [],
-            reviews: {}
-        }
+            email: event.detail.user.email
+          }
         }
         firebase.database().ref('users').update(user).then(() => {
             this.dispatchEvent(new CustomEvent('saved'));

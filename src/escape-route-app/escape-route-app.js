@@ -18,6 +18,13 @@ import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '../styles/escape-icons.js';
+import '../admin/admin-view.js';
+import '../games/escape-games.js';
+import '../games/game-view.js';
+import '../login/login-module.js';
+import '../mates/escape-mates.js';
+import '../views/user-review.js';
+import '../views/user-route.js';
 
 setPassiveTouchGestures(true);
 
@@ -106,7 +113,7 @@ class EscapeRouteApp extends PolymerElement {
           </app-header>
       
           <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
-            <login-module name="login" on-logged="_navigateToRoute"></login-module>
+            <login-module name="login" route="[[subroute]]" on-logged="_navigateToRoute"></login-module>
             <user-route name="route" on-add-review="_navigateToReview"></user-route>
             <escape-games name="games" on-game-selected="_navigateToGame"></escape-games>
             <game-view name="game" route="[[subroute]]"></game-view>
@@ -124,8 +131,7 @@ class EscapeRouteApp extends PolymerElement {
     return {
       page: {
         type: String,
-        reflectToAttribute: true,
-        observer: '_pageChanged'
+        reflectToAttribute: true
       },
       routeData: Object,
       subroute: Object,
@@ -191,7 +197,9 @@ class EscapeRouteApp extends PolymerElement {
   _navigateToRoute() {
     this._navigateToPath('route');
   }
-
+  _navigateToGames(event) {
+    this._navigateToPath('games');
+  }
   _navigateToGame(event) {
     this._navigateToPath('game/' + event.detail.gameId);
   }
@@ -199,37 +207,8 @@ class EscapeRouteApp extends PolymerElement {
     this._navigateToPath('review');
   }
 
-  _pageChanged(page) {
-    switch (page) {
-      case 'admin':
-        import ('../admin/admin-view.js');
-        break;
-      case 'games':
-        import ('../games/escape-games.js');
-        break;
-      case 'game':
-        import ('../games/game-view.js');
-        break;
-      case 'login':
-        import ('../login/login-module.js');
-        break;
-      case 'mates':
-        import ('../mates/escape-mates.js');
-        break;
-      case 'review':
-        import ('../views/user-review.js');
-        break;
-      case 'route':
-        import ('../views/user-route.js');
-        break;
-    }
-  }
-
   logout() {
-    firebase.auth().signOut().then(() => {
-      this.user = undefined;
-      this.mates = [];
-    });
+    firebase.auth().signOut();
   }
 
 }
