@@ -35,7 +35,7 @@ class SearchMate extends PolymerElement {
                     <paper-button on-click="_selectItem">{{item.displayName}}</paper-button>
                 </template>
             </iron-collapse>
-            <template id="mateList" is="dom-repeat" items="[[mates]]">
+            <template id="mateList" is="dom-repeat" items="[[matesList]]">
                     <paper-icon-item>{{item.displayName}}
                         <paper-icon-button on-click="_deleteMate" icon="delete" alt="Delete" title="clear"></paper-icon-button>
                     </paper-icon-item>
@@ -58,13 +58,13 @@ class SearchMate extends PolymerElement {
             },
             isSelected: Boolean,
             title: String,
-            mates: {
+            matesList: {
                 type: Array,
                 value: []
             },
-            uids: {
-                type: Array,
-                value: [],
+            mates: {
+                type: Object,
+                value: {},
                 notify: true
             }
         };
@@ -78,7 +78,7 @@ class SearchMate extends PolymerElement {
                     data[key].uid = key;
                 }
                 this.data = data ? Object.values(data) : [];
-                this.data = this.data.filter(item => !this.mates.find(
+                this.data = this.data.filter(item => !this.matesList.find(
                     mate => item.uid===mate.uid
                 ));
                 let collapse = this.$.collapse;
@@ -102,15 +102,25 @@ class SearchMate extends PolymerElement {
         let collapse = this.$.collapse;
         this.set('isSelected', true);
         this.set('searchValue', '');
-        this.mates.push(event.model.item);
-        this.mates = this.mates.slice(0);
-        this.uids = Array.from(this.mates, mate => mate.uid);
+        this.matesList.push(event.model.item);
+        this.matesList = this.matesList.slice(0);
+        this._completeMates();
         collapse.toggle();
     }
 
     _deleteMate(event) {
-        this.mates = this.mates.filter(mate => mate.uid !== event.model.item.uid);
-        this.uids = Array.from(this.mates, mate => mate.uid);
+        this.matesList = this.matesList.filter(mate => mate.uid !== event.model.item.uid);
+        this._completeMates();
+    }
+
+    _completeMates(){
+        let mates = {};
+        this.matesList.map(mate => { 
+            mates[mate.uid] = {
+                displayName: mate.displayName
+            }
+        });
+        this.mates = mates;
     }
 
 }

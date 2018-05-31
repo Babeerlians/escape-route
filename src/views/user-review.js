@@ -117,7 +117,7 @@ class UserReview extends PolymerElement {
                     </div>
                 </div>
                 <div class="mates">
-                    <search-mate id="searchMate" uids="{{uids}}" title="Mate"></search-mate>
+                    <search-mate id="searchMate" mates="{{mates}}" title="Mate"></search-mate>
                 </div>
                 <div>
                     <h2>Fecha</h2>
@@ -167,7 +167,7 @@ class UserReview extends PolymerElement {
                 type: String,
                 value: ''
             },
-            uids: {
+            mates: {
                 type: Array,
                 value: []
             },
@@ -226,7 +226,7 @@ class UserReview extends PolymerElement {
                     ambience: this.ambience
                 },
                 note: this.note,
-                mates: this.uids,
+                mates: this.mates,
                 date: this.date,
                 completed: this.completed,
                 duration: {
