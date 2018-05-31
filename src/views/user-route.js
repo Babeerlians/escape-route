@@ -10,6 +10,16 @@ import '@polymer/paper-card/paper-card.js';
 import '../components/icon-toggle.js';
 import '../styles/shared-styles.js';
 
+const sortByDate = (a, b) => {
+    if (a.date > b.date) {
+      return -1;
+    }
+    if (a.date < b.date) {
+      return 1;
+    }
+    return 0;
+  };
+
 class UserRoute extends PolymerElement {
     static get template() {
         return html`
@@ -100,7 +110,7 @@ class UserRoute extends PolymerElement {
                 <paper-spinner id="spinner"  class="hidden" active>...</paper-spinner>
                 <div class="flex grid">
                     <template id="reviews" is="dom-repeat" items="[[reviews]]" as="review">
-                        <paper-card heading="[[review.game.name.es]]" alt="[[review.game.name.es]]" image="[[review.game.narrowImage.translations.es]]">
+                        <paper-card heading="[[review.game.name.es]]" alt="[[review.game.name.es]]" image="[[review.image]]">
                             <div class="card-content">
                                 <div class="flex between">
                                     <span>[[review.game.company.name]]</span>
@@ -182,13 +192,23 @@ class UserRoute extends PolymerElement {
                 reviews.map(review => {
                     firebase.database().ref('games/' + review.uid).once('value', snapshot => {
                         review.game = snapshot.val();
-                        review.completedIco = review.completed ? 'image:timelapse' : 'image:timer-off';
-                        review.completedText = this._calculateCompleteText(review);
-                        this.reviews = this.reviews.concat(review);                        
+                        this._getImageUrl(review).then(url=>{
+                            review.image = url;
+                            review.completedIco = review.completed ? 'image:timelapse' : 'image:timer-off';
+                            review.completedText = this._calculateCompleteText(review);
+                            this.reviews = this.reviews.concat(review).sort(sortByDate);                        
+                        });
                     });
                 });
             });
         });
+    }
+
+    _getImageUrl(review) {
+        if(review.imageStored){
+            return firebase.storage().ref(review.imageStored).getDownloadURL();
+        }
+        return Promise.resolve(review.game.narrowImage.translations.es);
     }
 
     _calculateCompleteText (review){

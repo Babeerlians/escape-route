@@ -2,8 +2,9 @@ import {
     html,
     PolymerElement
 } from '@polymer/polymer/polymer-element.js';
-import '@polymer/paper-input/paper-textarea.js';
 import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-input/paper-textarea.js';
+import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-toggle-button/paper-toggle-button.js';
 import '@vaadin/vaadin-date-picker/vaadin-date-picker-light.js';
 import '../components/icon-toggle.js';
@@ -14,7 +15,7 @@ import '../styles/shared-styles.js';
 
 class UserReview extends PolymerElement {
     static get template() {
-        return html`
+        return html `
             <style include="shared-styles">
                 .valoration {
                     display: flex;
@@ -133,6 +134,9 @@ class UserReview extends PolymerElement {
                         <time-picker id="duration" minutes="{{minutes}}" seconds="{{seconds}}" class="not-visible"></time-picker>
                     </div>
                 </div>
+                    <paper-input id="imagesUpload" type="file" on-change="_filesChanged"></paper-input>
+                <div>
+                </div>
                 <div class="buttons">
                     <paper-button raised class="submit" on-click="_discardReview">Discard</paper-button>
                     <paper-button id="btnSave" raised class="submit red" disabled="true" on-click="_saveReview">Save</paper-button>
@@ -200,8 +204,7 @@ class UserReview extends PolymerElement {
         if (general > 0 && difficulty > 0 && ambience > 0 && note.length > 0 && idescape.length > 0 && date.length > 0) {
             if (completed === false || (completed === true && (minutes > 0 || seconds > 0))) {
                 this.$.btnSave.removeAttribute('disabled');
-            }
-            else {
+            } else {
                 this.$.btnSave.setAttribute('disabled', true);
             }
         } else {
@@ -218,57 +221,64 @@ class UserReview extends PolymerElement {
     }
 
     _saveReview() {
-        var review = {
-            [this.idescape]: {
-                valoration: {
-                    general: this.general,
-                    difficulty: this.difficulty,
-                    ambience: this.ambience
-                },
-                note: this.note,
-                mates: this.uids,
-                date: this.date,
-                completed: this.completed,
-                duration: {
-                    minutes: this.minutes,
-                    seconds: this.seconds
+        let imagePath = 'images/' + this.idescape + '/' + this.user.uid + '/' + this.image.name,
+            review = {
+                [this.idescape]: {
+                    valoration: {
+                        general: this.general,
+                        difficulty: this.difficulty,
+                        ambience: this.ambience
+                    },
+                    note: this.note,
+                    mates: this.uids,
+                    date: this.date,
+                    completed: this.completed,
+                    duration: {
+                        minutes: this.minutes,
+                        seconds: this.seconds
+                    },
+                    imageStored: imagePath
                 }
-            }
-        };
+            };
 
-        firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-                firebase.database().ref('users/' + user.uid + '/reviews').update(review).then(() => {
-                    firebase.database().ref('users').once('value', snapshot => {
-                        let valorationAcc = {
-                            valoration: {
-                                ambience: 0,
-                                difficulty: 0,
-                                general: 0
-                            }
-                        };
-                        let reviews = Object.values(snapshot.val()).filter(user =>
-                            user.reviews && user.reviews.hasOwnProperty(this.idescape)
-                        ).map(item => item.reviews[this.idescape]);
+        //Upload image
+        var storageRef = firebase.storage().ref(imagePath);
+        storageRef.put(this.image);
 
-                        let valorationAverage = reviews.reduce((acc, item) => {
-                            acc.valoration.ambience += item.valoration.ambience / reviews.length;
-                            acc.valoration.difficulty += item.valoration.difficulty / reviews.length;
-                            acc.valoration.general += item.valoration.general / reviews.length;
-                            return acc;
-                        }, valorationAcc);
+        firebase.database().ref('users/' + this.user.uid + '/reviews').update(review).then(() => {
+            firebase.database().ref('users').once('value', snapshot => {
+                let valorationAcc = {
+                    valoration: {
+                        ambience: 0,
+                        difficulty: 0,
+                        general: 0
+                    }
+                };
+                let reviews = Object.values(snapshot.val()).filter(user =>
+                    user.reviews && user.reviews.hasOwnProperty(this.idescape)
+                ).map(item => item.reviews[this.idescape]);
 
-                        firebase.database().ref('games/'+this.idescape).update(valorationAverage).then(() => {
-                            this.dispatchEvent(new CustomEvent('saved'));
-                        }).catch((error) => {
-                            console.log('Synchronization failed');
-                        });
-                    });
+                let valorationAverage = reviews.reduce((acc, item) => {
+                    acc.valoration.ambience += item.valoration.ambience / reviews.length;
+                    acc.valoration.difficulty += item.valoration.difficulty / reviews.length;
+                    acc.valoration.general += item.valoration.general / reviews.length;
+                    return acc;
+                }, valorationAcc);
+
+                firebase.database().ref('games/' + this.idescape).update(valorationAverage).then(() => {
+                    this.dispatchEvent(new CustomEvent('saved'));
                 }).catch((error) => {
                     console.log('Synchronization failed');
                 });
-            }
+            });
+        }).catch((error) => {
+            console.log('Synchronization failed');
         });
+    }
+
+    _filesChanged(event) {
+        this.image = this.$.imagesUpload.inputElement.inputElement.files[0];
+        console.log(this.image);
     }
 
 }

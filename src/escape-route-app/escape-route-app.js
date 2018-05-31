@@ -117,7 +117,7 @@ class EscapeRouteApp extends PolymerElement {
             <user-route name="route" on-add-review="_navigateToReview"></user-route>
             <escape-games name="games" on-game-selected="_navigateToGame"></escape-games>
             <game-view name="game" route="[[subroute]]"></game-view>
-            <user-review name="review" on-saved="_navigateToRoute" on-discarded="_navigateToRoute"></user-review>
+            <user-review name="review" user="[[user]]" on-saved="_navigateToRoute" on-discarded="_navigateToRoute"></user-review>
             <escape-mates name="mates"></escape-mates>
             <admin-view name="admin"></admin-view>
           </iron-pages>
@@ -176,6 +176,7 @@ class EscapeRouteApp extends PolymerElement {
     } else {
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
+          this.user = user;
           this.page = page;
         } else {
           this.page = 'login';
