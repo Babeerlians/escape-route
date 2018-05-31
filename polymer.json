@@ -2,13 +2,9 @@
   "entrypoint": "index.html",
   "shell": "src/escape-route-app/escape-route-app.js",
   "sources": [
-    "src/**.js",
-    "src/lib/**.js",
-    "manifest/**",
-    "package.json"
+    "favicon.ico"
   ],
   "extraDependencies": [
-    "manifest.json",
     "node_modules/@webcomponents/webcomponentsjs/*.js",
     "!node_modules/@webcomponents/webcomponentsjs/gulpfile.js",
     "node_modules/@webcomponents/webcomponentsjs/bundles/*.js"
@@ -19,5 +15,9 @@
     "rules": [
       "polymer-3"
     ]
-  }
+  },
+  "builds": [{
+    "name": "default",
+    "preset": "es6-bundled"
+  }]
 }
