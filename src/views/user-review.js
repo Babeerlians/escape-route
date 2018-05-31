@@ -118,7 +118,7 @@ class UserReview extends PolymerElement {
                     </div>
                 </div>
                 <div class="mates">
-                    <search-mate id="searchMate" uids="{{uids}}" title="Mate"></search-mate>
+                    <search-mate id="searchMate" mates="{{mates}}" title="Mate"></search-mate>
                 </div>
                 <div>
                     <h2>Fecha</h2>
@@ -171,7 +171,7 @@ class UserReview extends PolymerElement {
                 type: String,
                 value: ''
             },
-            uids: {
+            mates: {
                 type: Array,
                 value: []
             },
@@ -221,7 +221,7 @@ class UserReview extends PolymerElement {
     }
 
     _saveReview() {
-        let imagePath = 'images/' + this.idescape + '/' + this.user.uid + '/' + this.image.name,
+        let imageStored = 'images/' + this.idescape + '/' + this.user.uid + '/' + this.image.name,
             review = {
                 [this.idescape]: {
                     valoration: {
@@ -230,50 +230,51 @@ class UserReview extends PolymerElement {
                         ambience: this.ambience
                     },
                     note: this.note,
-                    mates: this.uids,
+                    mates: this.mates,
                     date: this.date,
                     completed: this.completed,
+                    imageStored,
                     duration: {
                         minutes: this.minutes,
                         seconds: this.seconds
-                    },
-                    imageStored: imagePath
+                    }
                 }
             };
 
         //Upload image
-        var storageRef = firebase.storage().ref(imagePath);
-        storageRef.put(this.image);
+        var storageRef = firebase.storage().ref(imageStored);
+        storageRef.put(this.image).then(() => {
+            firebase.database().ref('users/' + this.user.uid + '/reviews').update(review).then(() => {
+                firebase.database().ref('users').once('value', snapshot => {
+                    let valorationAcc = {
+                        valoration: {
+                            ambience: 0,
+                            difficulty: 0,
+                            general: 0
+                        }
+                    };
+                    let reviews = Object.values(snapshot.val()).filter(user =>
+                        user.reviews && user.reviews.hasOwnProperty(this.idescape)
+                    ).map(item => item.reviews[this.idescape]);
 
-        firebase.database().ref('users/' + this.user.uid + '/reviews').update(review).then(() => {
-            firebase.database().ref('users').once('value', snapshot => {
-                let valorationAcc = {
-                    valoration: {
-                        ambience: 0,
-                        difficulty: 0,
-                        general: 0
-                    }
-                };
-                let reviews = Object.values(snapshot.val()).filter(user =>
-                    user.reviews && user.reviews.hasOwnProperty(this.idescape)
-                ).map(item => item.reviews[this.idescape]);
+                    let valorationAverage = reviews.reduce((acc, item) => {
+                        acc.valoration.ambience += item.valoration.ambience / reviews.length;
+                        acc.valoration.difficulty += item.valoration.difficulty / reviews.length;
+                        acc.valoration.general += item.valoration.general / reviews.length;
+                        return acc;
+                    }, valorationAcc);
 
-                let valorationAverage = reviews.reduce((acc, item) => {
-                    acc.valoration.ambience += item.valoration.ambience / reviews.length;
-                    acc.valoration.difficulty += item.valoration.difficulty / reviews.length;
-                    acc.valoration.general += item.valoration.general / reviews.length;
-                    return acc;
-                }, valorationAcc);
-
-                firebase.database().ref('games/' + this.idescape).update(valorationAverage).then(() => {
-                    this.dispatchEvent(new CustomEvent('saved'));
-                }).catch((error) => {
-                    console.log('Synchronization failed');
+                    firebase.database().ref('games/' + this.idescape).update(valorationAverage).then(() => {
+                        this.dispatchEvent(new CustomEvent('saved'));
+                    }).catch((error) => {
+                        console.log('Synchronization failed');
+                    });
                 });
+            }).catch((error) => {
+                console.log('Synchronization failed');
             });
-        }).catch((error) => {
-            console.log('Synchronization failed');
         });
+
     }
 
     _filesChanged(event) {

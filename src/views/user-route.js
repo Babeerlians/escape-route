@@ -49,6 +49,10 @@ class UserRoute extends PolymerElement {
                 .between {
                     justify-content: space-between;
                 }
+
+                .column {
+                    flex-direction: column;
+                }
             
                 .valoration {
                     color: var(--app-primary-color);
@@ -63,9 +67,15 @@ class UserRoute extends PolymerElement {
                     margin: var(--card-margin);
                 }
             
-                div.light {
+                div.right {
                     color: var(--app-tertiary-color);
                     text-align: right;
+                    font-size: 14px;
+                }
+
+                div.left {
+                    color: var(--app-tertiary-color);
+                    text-align: left;
                     font-size: 14px;
                 }
             
@@ -114,27 +124,27 @@ class UserRoute extends PolymerElement {
                             <div class="card-content">
                                 <div class="flex between">
                                     <span>[[review.game.company.name]]</span>
-                                    <div class="light">
+                                    <div class="right">
                                         <iron-icon icon="communication:location-on"></iron-icon>
                                         <span>[[review.game.city.name.es]]</span>
                                     </div>
                                 </div>
                                 <div class="flex between">
-                                    <div class="light">
+                                    <div class="right">
                                         <iron-icon title="Date" icon="event"></iron-icon>
                                         <span>[[review.date]]</span>
                                     </div>
-                                    <div class="light">
+                                    <div class="right">
                                         <iron-icon title="Completion" icon="[[review.completedIco]]"></iron-icon>
                                         <span>[[review.completedText]] </span>
                                     </div>
                                 </div>
                                 <div class="flex between valoration">
-                                    <div class="light">
+                                    <div class="right">
                                         <span>[[review.valoration.ambience]]</span>
                                         <iron-icon title="Ambience" icon="image:color-lens"></iron-icon>
                                     </div>
-                                    <div class="light">
+                                    <div class="right">
                                         <span>[[review.valoration.difficulty]]</span>
                                         <iron-icon title="Difficulty" icon="lock"></iron-icon>
                                     </div>
@@ -145,6 +155,14 @@ class UserRoute extends PolymerElement {
                                 </div>
                                 <div class="flex between note">
                                         <span>[[review.note]]</span>
+                                </div>
+                                <div class="flex column">
+                                    <template is="dom-repeat" items="[[review.mateNameList]]" as="mate">
+                                        <div class="left">
+                                            <iron-icon icon="social:person"></iron-icon>
+                                            <span>[[mate]] </span>
+                                        </div>
+                                    </template
                                 </div>
                             </div>
                             <div class="card-actions">
@@ -196,7 +214,8 @@ class UserRoute extends PolymerElement {
                             review.image = url;
                             review.completedIco = review.completed ? 'image:timelapse' : 'image:timer-off';
                             review.completedText = this._calculateCompleteText(review);
-                            this.reviews = this.reviews.concat(review).sort(sortByDate);                        
+                            review.mateNameList = review.mates ? this._calculateMates(review.mates) : [];
+                            this.reviews = this.reviews.concat(review).sort(sortByDate);                       
                         });
                     });
                 });
@@ -216,6 +235,14 @@ class UserRoute extends PolymerElement {
             return review.duration.minutes.toString().padStart(2,"0") + ":" + review.duration.seconds.toString().padStart(2,"0");
         }
         return 'Not completed';
+    }
+
+    _calculateMates(mates) {
+        let mateList = [];
+        for (let [k, v] of Object.entries(mates)) {
+           mateList.push(v.displayName);
+        }
+        return mateList;
     }
 }
 
