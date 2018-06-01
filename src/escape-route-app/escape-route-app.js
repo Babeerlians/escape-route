@@ -22,7 +22,6 @@ import '../admin/admin-view.js';
 import '../games/escape-games.js';
 import '../games/game-view.js';
 import '../login/login-module.js';
-import '../mates/escape-mates.js';
 import '../views/user-review.js';
 import '../views/user-route.js';
 
@@ -97,7 +96,6 @@ class EscapeRouteApp extends PolymerElement {
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
             <a name="route" href="[[rootPath]]route">Route</a>
             <a name="games" href="[[rootPath]]games">Games</a>
-            <a name="mates" href="[[rootPath]]mates">Mates</a>
           </iron-selector>
         </app-drawer>
       
@@ -118,7 +116,6 @@ class EscapeRouteApp extends PolymerElement {
             <escape-games name="games" on-game-selected="_navigateToGame"></escape-games>
             <game-view name="game" route="[[subroute]]"></game-view>
             <user-review name="review" user="[[user]]" on-saved="_navigateToRoute" on-discarded="_navigateToRoute"></user-review>
-            <escape-mates name="mates"></escape-mates>
             <admin-view name="admin"></admin-view>
           </iron-pages>
         </app-header-layout>

@@ -134,9 +134,7 @@ class UserReview extends PolymerElement {
                         <time-picker id="duration" minutes="{{minutes}}" seconds="{{seconds}}" class="not-visible"></time-picker>
                     </div>
                 </div>
-                    <paper-input id="imagesUpload" type="file" on-change="_filesChanged"></paper-input>
-                <div>
-                </div>
+                <paper-input id="imagesUpload" type="file" on-change="_filesChanged"></paper-input>
                 <div class="buttons">
                     <paper-button raised class="submit" on-click="_discardReview">Discard</paper-button>
                     <paper-button id="btnSave" raised class="submit red" disabled="true" on-click="_saveReview">Save</paper-button>
