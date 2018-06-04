@@ -39,18 +39,8 @@ class EscapeRouteApp extends PolymerElement {
           --app-primary-color: #f73859;
           --app-secondary-color: #f3ecc8;
           --app-tertiary-color: #404b69;
-          --app-drawer-width: 150px;
+          --app-drawer-width: 120px;
           display: block;
-        }
-      
-        app-drawer-layout:not([narrow]) [drawer-toggle] {
-          display: none;
-        }
-      
-        @media (min-width: 640px) {
-          app-drawer {
-            z-index:0;
-          }
         }
 
         app-header {
@@ -81,6 +71,10 @@ class EscapeRouteApp extends PolymerElement {
         paper-icon-button:hover {
           color: var(--app-primary-color);
         }
+
+        .drawer {
+          margin-top: 4em
+        }
       </style>
       
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
@@ -91,33 +85,33 @@ class EscapeRouteApp extends PolymerElement {
       
       <app-drawer-layout fullbleed="" narrow="{{narrow}}">
         <!-- Drawer content -->
-        <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
-          <app-toolbar></app-toolbar>
-          <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-            <a name="route" href="[[rootPath]]route">Route</a>
-            <a name="games" href="[[rootPath]]games">Games</a>
-          </iron-selector>
-        </app-drawer>
       
         <!-- Main content -->
         <app-header-layout has-scrolling-region="">
       
           <app-header slot="header" condenses="" reveals="" effects="waterfall">
             <app-toolbar>
-              <paper-icon-button icon="escape-icons:menu" drawer-toggle=""></paper-icon-button>
+              <paper-icon-button icon="escape-icons:menu" drawer-toggle="" on-click="_toggleMenu"></paper-icon-button>
               <div main-title="">Escape route</div>
               <paper-icon-button icon="power-settings-new" title="Log out" on-click="logout"></paper-icon-button>
             </app-toolbar>
           </app-header>
-      
-          <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
-            <login-module name="login" route="[[subroute]]" on-logged="_navigateToRoute"></login-module>
-            <user-route name="route" on-add-review="_navigateToReview"></user-route>
-            <escape-games name="games" on-game-selected="_navigateToGame"></escape-games>
-            <game-view name="game" route="[[subroute]]"></game-view>
-            <user-review name="review" user="[[user]]" on-saved="_navigateToRoute" on-discarded="_navigateToRoute"></user-review>
-            <admin-view name="admin"></admin-view>
-          </iron-pages>
+          <app-drawer-layout id="drawerLayout" force-narrow>
+            <app-drawer id="drawer" class="drawer" slot="drawer" swipe-open="[[narrow]]">
+              <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+                <a name="route" href="[[rootPath]]route">Route</a>
+                <a name="games" href="[[rootPath]]games">Games</a>
+              </iron-selector>
+            </app-drawer>
+            <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
+              <login-module name="login" route="[[subroute]]" on-logged="_navigateToRoute"></login-module>
+              <user-route name="route" on-add-review="_navigateToReview"></user-route>
+              <escape-games name="games" on-game-selected="_navigateToGame"></escape-games>
+              <game-view name="game" route="[[subroute]]"></game-view>
+              <user-review name="review" user="[[user]]" on-saved="_navigateToRoute" on-discarded="_navigateToRoute"></user-review>
+              <admin-view name="admin"></admin-view>
+            </iron-pages>
+          </app-drawer-layout>
         </app-header-layout>
       </app-drawer-layout>
 
@@ -181,11 +175,15 @@ class EscapeRouteApp extends PolymerElement {
         }
       });
     }
+    this.$.drawer.close();
+    this.$.drawerLayout.forceNarrow = true;
+  }
 
-    // Close a non-persistent drawer when the page & route are changed.
-    if (!this.$.drawer.persistent) {
-      this.$.drawer.close();
+  _toggleMenu(event) {
+    if (this.$.drawerLayout.forceNarrow || !this.$.drawerLayout.narrow) {
+      this.$.drawerLayout.forceNarrow = !this.$.drawerLayout.forceNarrow;
     }
+      this.$.drawer.toggle();   
   }
 
   _navigateToPath(path) {
