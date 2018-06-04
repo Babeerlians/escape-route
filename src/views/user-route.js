@@ -12,21 +12,21 @@ import '../styles/shared-styles.js';
 
 const sortByDate = (a, b) => {
     if (a.date > b.date) {
-      return -1;
+        return -1;
     }
     if (a.date < b.date) {
-      return 1;
+        return 1;
     }
     return 0;
-  };
+};
 
 class UserRoute extends PolymerElement {
     static get template() {
-        return html`
+        return html `
             <style include="shared-styles">
                 :host {
                     --card-margin: 12px;
-                    --card-width: 500px;
+                    --card-width: 400px;
                     display: block;
                 }
             
@@ -83,17 +83,14 @@ class UserRoute extends PolymerElement {
                     width: var(--card-width);
                     margin: var(--card-margin);
                     --paper-card-header-text: {
-                        /*color: white;*/
                         color: var(--app-secondary-color);
                         background-color: rgba(0, 0, 0, 0.5);
                         width: 100%;
                         box-sizing: border-box;
-                    }
-                    ;
+                    };
                     --paper-card-header-image: {
-                        min-height:
-                    }
-                    ;
+                        max-height: calc(var(--card-width)*0.75);
+                    };
                 }
             
                 paper-spinner {
@@ -210,12 +207,12 @@ class UserRoute extends PolymerElement {
                 reviews.map(review => {
                     firebase.database().ref('games/' + review.uid).once('value', snapshot => {
                         review.game = snapshot.val();
-                        this._getImageUrl(review).then(url=>{
+                        this._getImageUrl(review).then(url => {
                             review.image = url;
                             review.completedIco = review.completed ? 'image:timelapse' : 'image:timer-off';
                             review.completedText = this._calculateCompleteText(review);
                             review.mateNameList = review.mates ? this._calculateMates(review.mates) : [];
-                            this.reviews = this.reviews.concat(review).sort(sortByDate);                       
+                            this.reviews = this.reviews.concat(review).sort(sortByDate);
                         });
                     });
                 });
@@ -224,15 +221,15 @@ class UserRoute extends PolymerElement {
     }
 
     _getImageUrl(review) {
-        if(review.imageStored){
+        if (review.imageStored) {
             return firebase.storage().ref(review.imageStored).getDownloadURL();
         }
         return Promise.resolve(review.game.narrowImage.translations.es);
     }
 
-    _calculateCompleteText (review){
-        if(review.completed) {
-            return review.duration.minutes.toString().padStart(2,"0") + ":" + review.duration.seconds.toString().padStart(2,"0");
+    _calculateCompleteText(review) {
+        if (review.completed) {
+            return review.duration.minutes.toString().padStart(2, "0") + ":" + review.duration.seconds.toString().padStart(2, "0");
         }
         return 'Not completed';
     }
@@ -240,7 +237,7 @@ class UserRoute extends PolymerElement {
     _calculateMates(mates) {
         let mateList = [];
         for (let [k, v] of Object.entries(mates)) {
-           mateList.push(v.displayName);
+            mateList.push(v.displayName);
         }
         return mateList;
     }

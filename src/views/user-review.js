@@ -109,7 +109,7 @@ class UserReview extends PolymerElement {
                     <div class="notes">
                         <h2>Note</h2>
                         <paper-textarea id="tanotes" placeholder="¿Te ha gustado el juego?¿Lo recomendarías? ¿Qué es lo mejor que tiene y qué destacarías? ¿Tiene algo que no te haya gustado?¿Qué cambios o mejoras sugerirías?"
-                            rows=4 maxlength=300 value="{{note}}"></paper-textarea>
+                            rows=4 maxlength=3000 value="{{note}}"></paper-textarea>
                     </div>
                     <div class="valoration">
                         <icon-toggle id="general" total=5 icon="star" value={{general}} title="General"></icon-toggle>
@@ -219,7 +219,7 @@ class UserReview extends PolymerElement {
     }
 
     _saveReview() {
-        let imageStored = 'images/' + this.idescape + '/' + this.user.uid + '/' + this.image.name,
+        let imageStored = this.image ? 'images/' + this.idescape + '/' + this.user.uid + '/' + this.image.name : false,
             review = {
                 [this.idescape]: {
                     valoration: {
@@ -239,40 +239,43 @@ class UserReview extends PolymerElement {
                 }
             };
 
-        //Upload image
-        var storageRef = firebase.storage().ref(imageStored);
-        storageRef.put(this.image).then(() => {
-            firebase.database().ref('users/' + this.user.uid + '/reviews').update(review).then(() => {
-                firebase.database().ref('users').once('value', snapshot => {
-                    let valorationAcc = {
-                        valoration: {
-                            ambience: 0,
-                            difficulty: 0,
-                            general: 0
-                        }
-                    };
-                    let reviews = Object.values(snapshot.val()).filter(user =>
-                        user.reviews && user.reviews.hasOwnProperty(this.idescape)
-                    ).map(item => item.reviews[this.idescape]);
-
-                    let valorationAverage = reviews.reduce((acc, item) => {
-                        acc.valoration.ambience += item.valoration.ambience / reviews.length;
-                        acc.valoration.difficulty += item.valoration.difficulty / reviews.length;
-                        acc.valoration.general += item.valoration.general / reviews.length;
-                        return acc;
-                    }, valorationAcc);
-
-                    firebase.database().ref('games/' + this.idescape).update(valorationAverage).then(() => {
-                        this.dispatchEvent(new CustomEvent('saved'));
-                    }).catch((error) => {
-                        console.log('Synchronization failed');
-                    });
-                });
-            }).catch((error) => {
-                console.log('Synchronization failed');
+        if (imageStored) {
+            //Upload image
+            var storageRef = firebase.storage().ref(imageStored);
+            storageRef.put(this.image).then(() => {
+                this._updateReview(review);
             });
-        });
+        } else {
+            this._updateReview(review);
+        }
+    }
 
+    _updateReview(review) {
+        firebase.database().ref('users/' + this.user.uid + '/reviews').update(review).then(() => {
+            firebase.database().ref('users').once('value', snapshot => {
+                let valorationAcc = {
+                    valoration: {
+                        ambience: 0,
+                        difficulty: 0,
+                        general: 0
+                    }
+                };
+                let reviews = Object.values(snapshot.val()).filter(user => user.reviews && user.reviews.hasOwnProperty(this.idescape)).map(item => item.reviews[this.idescape]);
+                let valorationAverage = reviews.reduce((acc, item) => {
+                    acc.valoration.ambience += item.valoration.ambience / reviews.length;
+                    acc.valoration.difficulty += item.valoration.difficulty / reviews.length;
+                    acc.valoration.general += item.valoration.general / reviews.length;
+                    return acc;
+                }, valorationAcc);
+                firebase.database().ref('games/' + this.idescape).update(valorationAverage).then(() => {
+                    this.dispatchEvent(new CustomEvent('saved'));
+                }).catch((error) => {
+                    console.log('Synchronization failed');
+                });
+            });
+        }).catch((error) => {
+            console.log('Synchronization failed');
+        });
     }
 
     _filesChanged(event) {

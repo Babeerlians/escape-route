@@ -74,14 +74,10 @@ class EscapeGames extends PolymerElement {
           width: var(--card-width);
           margin: var(--card-margin);
           --paper-card-header-text: {
-            /*color: white;*/
             color: var(--app-secondary-color);
             background-color: rgba(0,0,0, 0.5);
             width: 100%;
             box-sizing: border-box;
-          };
-          --paper-card-header-image: {
-            min-height: 
           };
         }
         paper-spinner {
@@ -94,8 +90,12 @@ class EscapeGames extends PolymerElement {
         paper-input, paper-dropdown-menu {
           background-color: var(--app-secondary-color);
         }
-        .card-actions a {
+        .card-actions {
+          justify-content: space-around;
+        }
+        .card-actions a {          
           color: var(--app-primary-color);
+          text-decoration: none;
         }
       </style>
         <div class="card flex">
@@ -149,9 +149,12 @@ class EscapeGames extends PolymerElement {
                   </template> 
                 </div>
               </div>
-              <div class="card-actions">
+              <div class="card-actions flex">
                 <a href="/game/[[item.id]]">
                   <paper-button>View</paper-button>
+                </a>
+                <a target=”_blank” href="[[item.booking_url]]">
+                  <paper-button>Book</paper-button>
                 </a>
               </div>
             </paper-card>
