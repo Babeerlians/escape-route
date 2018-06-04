@@ -142,7 +142,10 @@ class EscapeRouteApp extends PolymerElement {
       },
       routeData: Object,
       subroute: Object,
-      appInitialized: Boolean
+      appInitialized: {
+        type: Boolean,
+        value: false
+      }
     };
   }
 
@@ -158,7 +161,7 @@ class EscapeRouteApp extends PolymerElement {
   }
 
   _initializeFirebaseApp() {
-    if (!this.appInitialized) {
+    if (!this.appInitialized && !firebase.apps.length) {
       var config = {
         apiKey: "AIzaSyD67FXv2kXAFAFTITru3_UH63VXeYQRURk",
         authDomain: "escape-route-5e029.firebaseapp.com",

@@ -2,7 +2,8 @@
   "entrypoint": "index.html",
   "shell": "src/escape-route-app/escape-route-app.js",
   "sources": [
-    "favicon.ico"
+    "favicon.ico",
+    "logo.png"
   ],
   "extraDependencies": [
     "node_modules/@webcomponents/webcomponentsjs/*.js",
