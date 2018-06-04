@@ -18,7 +18,6 @@ import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/iron-image/iron-image.js';
 import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
-import '../styles/shared-styles.js';
 import '../styles/escape-icons.js';
 import '../admin/admin-view.js';
 import '../games/escape-games.js';
@@ -36,7 +35,7 @@ setRootPath('/');
 class EscapeRouteApp extends PolymerElement {
   static get template() {
     return html `
-     <style include="shared-styles">
+     <style>
         :host {
           --app-primary-color: #f73859;
           --app-secondary-color: #f3ecc8;
@@ -122,7 +121,7 @@ class EscapeRouteApp extends PolymerElement {
             </app-drawer>
             <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
               <login-module name="login" route="[[subroute]]" on-logged="_navigateToRoute"></login-module>
-              <user-route name="route" on-add-review="_navigateToReview"></user-route>
+              <user-route name="route"></user-route>
               <escape-games name="games" on-game-selected="_navigateToGame"></escape-games>
               <game-view name="game" route="[[subroute]]"></game-view>
               <user-review name="review" user="[[user]]" on-saved="_navigateToRoute" on-discarded="_navigateToRoute"></user-review>
@@ -215,9 +214,6 @@ class EscapeRouteApp extends PolymerElement {
   }
   _navigateToGame(event) {
     this._navigateToPath('game/' + event.detail.gameId);
-  }
-  _navigateToReview() {
-    this._navigateToPath('review');
   }
 
   logout() {

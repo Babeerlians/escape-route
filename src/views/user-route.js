@@ -111,9 +111,18 @@ class UserRoute extends PolymerElement {
                 }
             </style>
             <div class="card">
-                <paper-button raised noink class="red" on-click="_addReview">
-                    <iron-icon icon="add-circle-outline"></iron-icon>&nbsp;Add review
-                </paper-button>
+                <div class="flex grid">
+                    <paper-card>
+                        <div class="card-content">
+                            <span>Something to review, [[user.displayName]]?</span>
+                        </div>
+                        <div class="card-actions">
+                            <a href="/review">
+                                <paper-button><iron-icon icon="add-circle-outline"></iron-icon>&nbsp;Add review</paper-button>
+                            </a>
+                        </div>
+                    </paper-card>
+                </div>
                 <paper-spinner id="spinner"  class="hidden" active>...</paper-spinner>
                 <div class="flex grid">
                     <template id="reviews" is="dom-repeat" items="[[reviews]]" as="review">
@@ -186,10 +195,6 @@ class UserRoute extends PolymerElement {
     connectedCallback() {
         super.connectedCallback();
         this._getReviews();
-    }
-
-    _addReview() {
-        this.dispatchEvent(new CustomEvent('add-review'));
     }
 
     _getReviews() {
