@@ -27,18 +27,6 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         font-weight: bold;
       }
 
-      .circle {
-        display: inline-block;
-        width: 64px;
-        height: 64px;
-        text-align: center;
-        color: #555;
-        border-radius: 50%;
-        background: #ddd;
-        font-size: 30px;
-        line-height: 64px;
-      }
-
       .flex {
         display: flex;
       }

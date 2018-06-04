@@ -15,8 +15,10 @@ import '@polymer/app-layout/app-toolbar/app-toolbar.js';
 import '@polymer/app-route/app-location.js';
 import '@polymer/app-route/app-route.js';
 import '@polymer/iron-pages/iron-pages.js';
+import '@polymer/iron-image/iron-image.js';
 import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
+import '../styles/shared-styles.js';
 import '../styles/escape-icons.js';
 import '../admin/admin-view.js';
 import '../games/escape-games.js';
@@ -34,12 +36,13 @@ setRootPath('/');
 class EscapeRouteApp extends PolymerElement {
   static get template() {
     return html `
-     <style> 
+     <style include="shared-styles">
         :host {
           --app-primary-color: #f73859;
           --app-secondary-color: #f3ecc8;
           --app-tertiary-color: #404b69;
           --app-drawer-width: 150px;
+          --iron-image-width: 42px;
           display: block;
         }
       
@@ -77,6 +80,16 @@ class EscapeRouteApp extends PolymerElement {
         .drawer-list a.iron-selected {
           font-weight: bold;
         }
+
+        .logo {
+          border-radius: 50%;
+          vertical-align: sub;
+        }
+
+        .title {
+          vertical-align: super;
+          margin-left: 4px;
+        }
       
         paper-icon-button:hover {
           color: var(--app-primary-color);
@@ -105,7 +118,10 @@ class EscapeRouteApp extends PolymerElement {
           <app-header slot="header" condenses="" reveals="" effects="waterfall">
             <app-toolbar>
               <paper-icon-button icon="escape-icons:menu" drawer-toggle=""></paper-icon-button>
-              <div main-title="">Escape route</div>
+              <div main-title="Babeerlian - Escape route">
+                <iron-image alt="Babeerlian" class="logo" src="./logo.png"></iron-image>
+                <span class="title">Escape route<span>
+              </div>
               <paper-icon-button icon="power-settings-new" title="Log out" on-click="logout"></paper-icon-button>
             </app-toolbar>
           </app-header>
