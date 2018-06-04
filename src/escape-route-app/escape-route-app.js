@@ -25,6 +25,7 @@ import '../games/game-view.js';
 import '../login/login-module.js';
 import '../views/user-review.js';
 import '../views/user-route.js';
+import '../views/review-game.js';
 
 setPassiveTouchGestures(true);
 
@@ -121,11 +122,12 @@ class EscapeRouteApp extends PolymerElement {
             </app-drawer>
             <iron-pages selected="[[page]]" attr-for-selected="name" role="main">
               <login-module name="login" route="[[subroute]]" on-logged="_navigateToRoute"></login-module>
-              <user-route name="route"></user-route>
+              <user-route name="route" on-view-review="_navigateToReview"></user-route>
               <escape-games name="games" on-game-selected="_navigateToGame"></escape-games>
               <game-view name="game" route="[[subroute]]"></game-view>
-              <user-review name="review" user="[[user]]" on-saved="_navigateToRoute" on-discarded="_navigateToRoute"></user-review>
+              <user-review name="newreview" user="[[user]]" on-saved="_navigateToRoute" on-discarded="_navigateToRoute"></user-review>
               <admin-view name="admin"></admin-view>
+              <review-game name="review" route="[[subroute]]"></review-game>
             </iron-pages>
           </app-drawer-layout>
         </app-header-layout>
@@ -218,6 +220,16 @@ class EscapeRouteApp extends PolymerElement {
   _navigateToGame(event) {
     this._navigateToPath('game/' + event.detail.gameId);
   }
+<<<<<<< Updated upstream
+=======
+  _navigateToNewReview() {
+    this._navigateToPath('newreview');
+  }
+
+  _navigateToReview(event) {
+    this._navigateToPath('review/' + event.detail.reviewId);
+  }
+>>>>>>> Stashed changes
 
   logout() {
     firebase.auth().signOut();
