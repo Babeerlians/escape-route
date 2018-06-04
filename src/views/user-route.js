@@ -172,8 +172,8 @@ class UserRoute extends PolymerElement {
                                 </div>
                             </div>
                             <div class="card-actions">
-                                <a href="/game/[[review.game.id]]">
-                                    <paper-button>View</paper-button>
+                                <a href="#">
+                                    <paper-button on-click="_prepareReview">View</paper-button>
                                 </a>
                             </div>
                         </paper-card>
@@ -245,6 +245,11 @@ class UserRoute extends PolymerElement {
             mateList.push(v.displayName);
         }
         return mateList;
+    }
+
+    _prepareReview(event) {
+        window.sessionStorage.setItem(event.model.review.game.id,JSON.stringify(event.model.review));
+        this.dispatchEvent(new CustomEvent('view-review', { detail: {reviewId : event.model.review.game.id}}));
     }
 }
 
