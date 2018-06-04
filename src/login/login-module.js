@@ -37,23 +37,23 @@ class LoginModule extends PolymerElement {
 
   _manageLoginUser(event) {
     firebase.database().ref('users/' + event.detail.user.uid).on('value', snapshot => {
-      const user = {
-        [event.detail.user.uid]: {
-          displayName: event.detail.user.displayName,
-          email: event.detail.user.email,
-          photoURL: event.detail.user.photoURL,
-          phoneNumber: event.detail.user.phoneNumber,
-          emailVerified: event.detail.user.emailVerified
+      if (!snapshot.val()) {
+        const user = {
+          [event.detail.user.uid]: {
+            displayName: event.detail.user.displayName,
+            email: event.detail.user.email
+          }
         }
-      };
-      firebase.database().ref('users').update(user).then(() => {
-          this.dispatchEvent(new CustomEvent('saved'));
-        })
-        .catch((error) => {
-          console.log('Synchronization failed');
-        });
+        firebase.database().ref('users').update(user).then(() => {
+            this.dispatchEvent(new CustomEvent('saved'));
+          })
+          .catch((error) => {
+            console.log('Synchronization failed');
+          });
+      }
     });
   }
+
 }
 
 window.customElements.define('login-module', LoginModule);
