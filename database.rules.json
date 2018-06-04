@@ -1,6 +1,9 @@
 {
   "rules": {
     ".read": true,
-    ".write": true
+    ".write": true,
+    "games": {
+      ".indexOn": ["name/es", "city/name/es", "company/name", "duration", "valoration/general"]
+    }
   }
 }
