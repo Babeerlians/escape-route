@@ -41,10 +41,7 @@ class ReviewGame extends PolymerElement {
                     color: var(--app-tertiary-color);
                     text-align: right;
                     font-size: 14px;
-                }
-                div.valoration {
-                    color: var(--app-primary-color);
-                    margin-top: 12px;
+                    padding: 5px;
                 }
             </style>
             <paper-card heading="[[review.game.name.es]]" alt="[[review.game.name.es]]" image="[[review.game.wideImage.translations.es]]">
@@ -69,7 +66,7 @@ class ReviewGame extends PolymerElement {
                             </template>
                         </div>
                     </div>
-                    <div class="flex between valoration">
+                    <div class="flex between">
                         <h3>Valoration</h3>
                         <div class="light">
                             <span>[[review.valoration.ambience]]</span>
@@ -79,7 +76,7 @@ class ReviewGame extends PolymerElement {
                             <span>[[review.valoration.difficulty]]</span>
                             <iron-icon title="Difficulty" icon="lock"></iron-icon>
                         </div>
-                        <div>
+                        <div class="light">
                             <span>[[review.valoration.general]]</span>
                             <iron-icon title="General" icon="star"></iron-icon>
                         </div>

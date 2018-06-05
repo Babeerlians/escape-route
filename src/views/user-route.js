@@ -117,7 +117,7 @@ class UserRoute extends PolymerElement {
                             <span>Something to review, [[user.displayName]]?</span>
                         </div>
                         <div class="card-actions">
-                            <a href="/review">
+                            <a href="/add-review">
                                 <paper-button><iron-icon icon="add-circle-outline"></iron-icon>&nbsp;Add review</paper-button>
                             </a>
                         </div>

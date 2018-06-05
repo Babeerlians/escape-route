@@ -125,7 +125,7 @@ class EscapeRouteApp extends PolymerElement {
               <user-route name="route" on-view-review="_navigateToReview"></user-route>
               <escape-games name="games" on-game-selected="_navigateToGame"></escape-games>
               <game-view name="game" route="[[subroute]]"></game-view>
-              <user-review name="newreview" user="[[user]]" on-saved="_navigateToRoute" on-discarded="_navigateToRoute"></user-review>
+              <user-review name="add-review" user="[[user]]" on-saved="_navigateToRoute" on-discarded="_navigateToRoute"></user-review>
               <admin-view name="admin"></admin-view>
               <review-game name="review" route="[[subroute]]"></review-game>
             </iron-pages>
@@ -220,16 +220,10 @@ class EscapeRouteApp extends PolymerElement {
   _navigateToGame(event) {
     this._navigateToPath('game/' + event.detail.gameId);
   }
-<<<<<<< Updated upstream
-=======
-  _navigateToNewReview() {
-    this._navigateToPath('newreview');
-  }
 
   _navigateToReview(event) {
     this._navigateToPath('review/' + event.detail.reviewId);
   }
->>>>>>> Stashed changes
 
   logout() {
     firebase.auth().signOut();
