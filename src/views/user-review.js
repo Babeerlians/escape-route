@@ -17,6 +17,9 @@ class UserReview extends PolymerElement {
     static get template() {
         return html `
             <style include="shared-styles">
+                :host {
+                   margin: auto;
+                }
                 .valoration {
                     display: flex;
                 }
@@ -24,7 +27,9 @@ class UserReview extends PolymerElement {
                 .review {
                     display: flex;
                 }
-            
+                .card {
+                    max-width: 100%;
+                }
                 .date {
                     display: flex;
                     justify-content: space-evenly;

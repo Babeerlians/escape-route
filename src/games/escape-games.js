@@ -30,7 +30,9 @@ class EscapeGames extends PolymerElement {
         :host {
           --card-margin: 12px;
           --card-width: 300px;
-          display: block;
+          display: flex;
+          align-items: center;
+          flex-direction: column;
         }
         li.flex {
           justify-content: flex-start;
@@ -42,6 +44,7 @@ class EscapeGames extends PolymerElement {
         }
         .w-20 {
           width: 20%;
+          min-width: 100px;
         }
         p.flex {
           justify-content: center;

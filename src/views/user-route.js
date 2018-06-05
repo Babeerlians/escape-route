@@ -27,7 +27,7 @@ class UserRoute extends PolymerElement {
                 :host {
                     --card-margin: 12px;
                     --card-width: 400px;
-                    display: block;
+                    margin: 16px;
                 }
             
                 p.flex {
@@ -110,75 +110,73 @@ class UserRoute extends PolymerElement {
                     color: var(--app-primary-color);
                 }
             </style>
-            <div class="card">
-                <div class="flex grid">
-                    <paper-card>
+            <div class="flex grid">
+                <paper-card>
+                    <div class="card-content">
+                        <span>Something to review, [[user.displayName]]?</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="/add-review">
+                            <paper-button><iron-icon icon="add-circle-outline"></iron-icon>&nbsp;Add review</paper-button>
+                        </a>
+                    </div>
+                </paper-card>
+            </div>
+            <paper-spinner id="spinner"  class="hidden" active>...</paper-spinner>
+            <div class="flex grid">
+                <template id="reviews" is="dom-repeat" items="[[reviews]]" as="review">
+                    <paper-card heading="[[review.game.name.es]]" alt="[[review.game.name.es]]" image="[[review.image]]">
                         <div class="card-content">
-                            <span>Something to review, [[user.displayName]]?</span>
+                            <div class="flex between">
+                                <span>[[review.game.company.name]]</span>
+                                <div class="right">
+                                    <iron-icon icon="communication:location-on"></iron-icon>
+                                    <span>[[review.game.city.name.es]]</span>
+                                </div>
+                            </div>
+                            <div class="flex between">
+                                <div class="right">
+                                    <iron-icon title="Date" icon="event"></iron-icon>
+                                    <span>[[review.date]]</span>
+                                </div>
+                                <div class="right">
+                                    <iron-icon title="Completion" icon="[[review.completedIco]]"></iron-icon>
+                                    <span>[[review.completedText]] </span>
+                                </div>
+                            </div>
+                            <div class="flex between valoration">
+                                <div class="right">
+                                    <span>[[review.valoration.ambience]]</span>
+                                    <iron-icon title="Ambience" icon="image:color-lens"></iron-icon>
+                                </div>
+                                <div class="right">
+                                    <span>[[review.valoration.difficulty]]</span>
+                                    <iron-icon title="Difficulty" icon="lock"></iron-icon>
+                                </div>
+                                <div>
+                                    <span>[[review.valoration.general]]</span>
+                                    <iron-icon title="General" icon="star"></iron-icon>
+                                </div>
+                            </div>
+                            <div class="flex between note">
+                                    <span>[[review.note]]</span>
+                            </div>
+                            <div class="flex column">
+                                <template is="dom-repeat" items="[[review.mateNameList]]" as="mate">
+                                    <div class="left">
+                                        <iron-icon icon="social:person"></iron-icon>
+                                        <span>[[mate]] </span>
+                                    </div>
+                                </template
+                            </div>
                         </div>
                         <div class="card-actions">
-                            <a href="/add-review">
-                                <paper-button><iron-icon icon="add-circle-outline"></iron-icon>&nbsp;Add review</paper-button>
+                            <a href="#">
+                                <paper-button on-click="_prepareReview">View</paper-button>
                             </a>
                         </div>
                     </paper-card>
-                </div>
-                <paper-spinner id="spinner"  class="hidden" active>...</paper-spinner>
-                <div class="flex grid">
-                    <template id="reviews" is="dom-repeat" items="[[reviews]]" as="review">
-                        <paper-card heading="[[review.game.name.es]]" alt="[[review.game.name.es]]" image="[[review.image]]">
-                            <div class="card-content">
-                                <div class="flex between">
-                                    <span>[[review.game.company.name]]</span>
-                                    <div class="right">
-                                        <iron-icon icon="communication:location-on"></iron-icon>
-                                        <span>[[review.game.city.name.es]]</span>
-                                    </div>
-                                </div>
-                                <div class="flex between">
-                                    <div class="right">
-                                        <iron-icon title="Date" icon="event"></iron-icon>
-                                        <span>[[review.date]]</span>
-                                    </div>
-                                    <div class="right">
-                                        <iron-icon title="Completion" icon="[[review.completedIco]]"></iron-icon>
-                                        <span>[[review.completedText]] </span>
-                                    </div>
-                                </div>
-                                <div class="flex between valoration">
-                                    <div class="right">
-                                        <span>[[review.valoration.ambience]]</span>
-                                        <iron-icon title="Ambience" icon="image:color-lens"></iron-icon>
-                                    </div>
-                                    <div class="right">
-                                        <span>[[review.valoration.difficulty]]</span>
-                                        <iron-icon title="Difficulty" icon="lock"></iron-icon>
-                                    </div>
-                                    <div>
-                                        <span>[[review.valoration.general]]</span>
-                                        <iron-icon title="General" icon="star"></iron-icon>
-                                    </div>
-                                </div>
-                                <div class="flex between note">
-                                        <span>[[review.note]]</span>
-                                </div>
-                                <div class="flex column">
-                                    <template is="dom-repeat" items="[[review.mateNameList]]" as="mate">
-                                        <div class="left">
-                                            <iron-icon icon="social:person"></iron-icon>
-                                            <span>[[mate]] </span>
-                                        </div>
-                                    </template
-                                </div>
-                            </div>
-                            <div class="card-actions">
-                                <a href="#">
-                                    <paper-button on-click="_prepareReview">View</paper-button>
-                                </a>
-                            </div>
-                        </paper-card>
-                    </template>
-                </div>
+                </template>
             </div>
         `;
     }

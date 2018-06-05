@@ -4,7 +4,6 @@ import {
 } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-dialog/paper-dialog.js';
-import '@polymer/paper-styles/shadow.js';
 import '../styles/shared-styles.js';
 
 class EscapeView extends PolymerElement {
@@ -37,7 +36,7 @@ class EscapeView extends PolymerElement {
                     border-top: none;
                     border-bottom-left-radius: 5px;
                     border-bottom-right-radius: 5px;
-                    @apply --shadow-elevation-2dp;
+                    /*@apply --shadow-elevation-2dp;*/
                 }
                 .buttons {
                     display: flex;

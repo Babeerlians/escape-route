@@ -12,7 +12,9 @@ class ReviewGame extends PolymerElement {
         return html `
             <style include="shared-styles">
                 :host {
-                    display: block;
+                    display: flex;
+                    justify-content: center;
+                    margin: 16px;
                 }
                 .smallMap {
                     height: 300px;
@@ -24,6 +26,7 @@ class ReviewGame extends PolymerElement {
                 }
                 paper-card {
                     width: 100%;
+                    max-width: 1024px;
                     --paper-card-header-text: {
                         color: var(--app-secondary-color);
                         background-color: rgba(0, 0, 0, 0.5);

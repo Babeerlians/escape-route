@@ -1,0 +1,23 @@
+body { 
+  background-image: url("background.jpg");
+  background-size: 100%;
+  color: rgba(0,0,0,0.87); 
+  font-family: Roboto, Helvetica, Arial, sans-serif; 
+  margin: 0; 
+  padding: 0; 
+}
+@media (max-width: 1000px) {
+  body {
+    background-size: 125%;
+  }
+}
+@media (max-width: 800px) {
+  body {
+    background-size: 150%;
+  }
+}
+@media (max-width: 640px) {
+  body {
+    background-size: 175%;
+  }
+}

@@ -18,6 +18,7 @@ import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/iron-image/iron-image.js';
 import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@polymer/paper-styles/shadow.js';
 import '../styles/escape-icons.js';
 import '../admin/admin-view.js';
 import '../games/escape-games.js';
