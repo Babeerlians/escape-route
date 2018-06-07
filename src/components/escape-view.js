@@ -4,6 +4,7 @@ import {
 } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-dialog/paper-dialog.js';
+import '@polymer/paper-styles/shadow.js';
 import '../styles/shared-styles.js';
 
 class EscapeView extends PolymerElement {
@@ -11,83 +12,121 @@ class EscapeView extends PolymerElement {
         return html `
             <style include="shared-styles">
                 :host {
-                    display: block;
-                }
-                .inputWithButton:not(.hidden) {
-                    display: flex
-                }
-                .inputWithButton paper-button{
-                    margin: 0px;
+                    display: flex;
+                    justify-content: center;
+                    margin: 16px;
                 }
                 .smallMap {
-                    height: 300px;
+                    height: 600px;
                 }
                 @media (max-width: 640px) {
                     .smallMap {
-                        height: 200px;
+                        height: 400px;
                     }
                 }
-                paper-dialog {
-                    overflow-y: auto;
+                paper-card {
+                    width: 100%;
+                    max-width: 1024px;
+                    --paper-card-header-text: {
+                        color: var(--app-secondary-color);
+                        background-color: rgba(0, 0, 0, 0.5);
+                        width: 100%;
+                        box-sizing: border-box;
+                    };
                 }
-                iron-collapse {
-                    padding: 8px;
-                    border: 1px solid #dedede;
-                    border-top: none;
-                    border-bottom-left-radius: 5px;
-                    border-bottom-right-radius: 5px;
-                    /*@apply --shadow-elevation-2dp;*/
+                div.flex {
+                    align-items: center
                 }
-                .buttons {
-                    display: flex;
-                    justify-content: center;
+                div > h3 {
+                    margin-right: 2em
                 }
-                .buttons paper-icon-button {
-                    padding: 0px;
+                div.right {
+                    color: var(--app-tertiary-color);
+                    text-align: right;
+                    font-size: 14px;
+                    padding: 5px;
+                }
+                div.left {
+                    color: var(--app-tertiary-color);
+                    text-align: left;
+                    font-size: 14px;
+                    padding: 5px;
                 }
             </style>
-            <template is="dom-if" if="[[!isEmpty(itemValue)]]">
-                <div id="escapeButton" class="inputWithButton">
-                        <paper-button class="red" raised on-click="_toggleEscape">[[itemValue.name.es]]</paper-button>
-                        <template is="dom-if" if="[[clear]]">
-                            <paper-icon-button on-click="_clearInput" icon="clear" alt="Clear" title="clear"></paper-icon-button>
-                        </template>
+            <paper-card heading="[[game.name.es]]" alt="[[game.name.es]]" image="[[game.wideImage.translations.es]]">
+                <div class="card-content">
+                    <div class="flex between">
+                        <h3>Description:</h3>
+                        <div class="left" id="description">
+                        </div>
+                    </div>
+                    <div class="flex between">
+                        <h3>Duration:</h3>
+                        <div class="right">
+                        <iron-icon title="Duration" icon="image:timelapse"></iron-icon>
+                        <span>[[game.duration]] min </span>
+                        </div>
+                    </div>
+                    <div class="flex between">
+                        <h3>Valoration:</h3>
+                        <div class="right">
+                            <span>[[game.valoration.ambience]]</span>
+                            <iron-icon title="Ambience" icon="image:color-lens"></iron-icon>
+                            </div>
+                        <div class="right">
+                            <span>[[game.valoration.difficulty]]</span>
+                            <iron-icon title="Difficulty" icon="lock"></iron-icon>
+                        </div>
+                        <div class="right">
+                            <span>[[game.valoration.general]]</span>
+                            <iron-icon title="General" icon="star"></iron-icon>
+                        </div>
+                    </div>
+                    <div class="between">
+                        <h3>Localization:</h3>
+                        <div id="map" class="smallMap"></div>
+                    </div>
                 </div>
-            </template>
-            <iron-collapse id="escape">
-                <h1>[[itemValue.name.es]]</h1>
-                <div id="description"></div>
-                <div><h3>Duration</h3><p>[[itemValue.duration]]</p></div>
-                <div><h3>Audience age</h3><p>[[itemValue.audience_age]]</p></div>
-                <div><h3>Localization</h3><div id="map" class="smallMap"></div></div>
-                <div id="collapseButton" class="buttons">
-                    <paper-icon-button on-click="_hideEscape" icon="expand-less" alt="Collapse" title="Collapse"></paper-icon-button>
-                </div>
-            </iron-collapse>
+            </paper-card>
         `;
     }
 
     static get properties() {
         return {
-            itemValue: {
+            game: {
                 type: Object,
-                value: {}
+                value: {},
+                observer: '_renderView'
             },
-            clear: {
-                type: Boolean
+            route: {
+                type: Object,
+                observer: '_retrieveGame'
             }
         };
     }
 
-    isEmpty(itemValue) {
-        return itemValue == null ? true : JSON.stringify(itemValue) === JSON.stringify({});
+    toggleClass(className){
+        if(this.classList.value.indexOf(className)>=0){
+            this.classList.add(className);
+        } else {
+            this.classList.remove(className);
+        }
     }
 
-    _toggleEscape() {
-        if (!this.$.escape.opened) {
+    _retrieveGame() {
+        if (Object.is(this.route.prefix, '/game')) {
+            let gameId = this.route.path.substring(1);
+            if (sessionStorage.getItem(gameId)) {
+                this.game = JSON.parse(sessionStorage.getItem(gameId));
+            }
+        }
+    }
+
+    _renderView() {
+        if(!this.isEmpty(this.game)) {
             let uluru = {
-                lat: parseFloat(this.itemValue.company.latitude),
-                lng: parseFloat(this.itemValue.company.longitude)
+                lat: parseFloat(this.game.company.latitude),
+                lng: parseFloat(this.game.company.longitude)
             };
             let map = new google.maps.Map(this.$.map, {
                 zoom: 15,
@@ -97,33 +136,12 @@ class EscapeView extends PolymerElement {
                 position: uluru,
                 map: map
             });
+            this.$.description.innerHTML = this.game.description;
         }
-        this.$.description.innerHTML = this.itemValue.description;
-        this.$.escape.toggle();
     }
 
-    showEscape() {
-        if (this.$.escape.opened) {
-            this.$.escape.toggle();
-        }
-        this._toggleEscape();
-    }
-
-    _hideEscape(event) {
-        this.$.escape.toggle();
-    }
-
-    _clearInput(event) {
-        this.set('itemValue', {});
-        this.dispatchEvent(new CustomEvent('clear'));
-    }
-
-    toggleClass(className){
-        if(this.classList.value.indexOf(className)>=0){
-            this.classList.add(className);
-        } else {
-            this.classList.remove(className);
-        }
+    isEmpty(itemValue) {
+        return itemValue == null ? true : JSON.stringify(itemValue) === JSON.stringify({});
     }
 }
 

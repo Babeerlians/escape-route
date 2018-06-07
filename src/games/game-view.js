@@ -3,7 +3,7 @@ import {
   PolymerElement
 } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-spinner/paper-spinner.js';
-import '../components/search-escape.js';
+import '../components/escape-view';
 import '../styles/shared-styles.js';
 
 class EscapeGames extends PolymerElement {
@@ -11,17 +11,12 @@ class EscapeGames extends PolymerElement {
     return html `
       <style include="shared-styles">
         :host {
-            display: block;
-        }
-        .centered {
-          display: flex;
-          align-items: center;
+           display: flex;
+           justify-content: center;
         }
       </style>
-      <div class="card centered">
-        <escape-view id="escapeView" item-value="[[itemValue]]"></escape-view>
-        <paper-spinner id="spinner" class="hidden" active>...</paper-spinner>
-      </div>
+      <escape-view id="escapeView" game="[[itemValue]]"></escape-view>
+      <paper-spinner id="spinner" class="hidden" active>...</paper-spinner>
     `;
   }
 
@@ -41,7 +36,6 @@ class EscapeGames extends PolymerElement {
       let gameId = this.route.path.substring(1);
       firebase.database().ref('games/' + gameId).once('value', snapshot => {
         this.itemValue = snapshot.val();
-        this.$.escapeView.showEscape();
         this._toggleSpinner();
       });
     }

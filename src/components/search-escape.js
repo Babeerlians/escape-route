@@ -4,7 +4,7 @@ import {
 } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-collapse/iron-collapse.js';
 import '@polymer/paper-input/paper-input.js';
-import './escape-view.js';
+import './escape-toggle.js';
 import '../styles/shared-styles.js';
 
 class SearchEscape extends PolymerElement {
@@ -33,7 +33,7 @@ class SearchEscape extends PolymerElement {
                     <paper-button on-click="_selectItem">{{item.name.es}}</paper-button>
                 </template>
             </iron-collapse>
-            <escape-view id="inputWithButton" item-value="[[itemValue]]" clear class="hidden" on-clear="_clearEscape"></escape-view>
+            <escape-toggle id="inputWithButton" item-value="[[itemValue]]" clear class="hidden" on-clear="_clearEscape"></escape-toggle>
         `;
     }
 
